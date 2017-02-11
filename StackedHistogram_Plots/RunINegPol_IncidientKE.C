@@ -7,12 +7,17 @@
 // ###       spreadsheet goes into these catagories to scale the particle species appropriately
 // ######################################################################################################
 // ######################################################################################################
-double PionPercentage     = 0.25399;
-double MuonPercentage     = 12.745;
-double ElectronPercentage = 0.59864;
-double PhotonPercentage   = 0.93574;
-double KaonPercentage     = 181.425;
+double PionPercentage     = 0.22967;
+double MuonPercentage     = 13.2458;
+double ElectronPercentage = 0.59274;
+double PhotonPercentage   = 1.32144;
+double KaonPercentage     = 176.167;
 
+/*double PionPercentage     = 1.0;
+double MuonPercentage     = 1.0;
+double ElectronPercentage = 1.0;
+double PhotonPercentage   = 1.0;
+double KaonPercentage     = 1.0;*/
 
 
 // #######################
@@ -44,7 +49,7 @@ TFile *f5 = new TFile("../histoROOTfiles_forPlots/KaonMC_RunI_OutOfTheBox.root")
 // #####################################
 // ### Load Photon Monte Carlo Plots ###
 // #####################################
-TFile *f6 = new TFile("./histo_ROOTFILES/PhotonMC_NewMatch_wScalings_dEdXScale_Reordering_FixExtremeAndSmallFluctuation.root");
+TFile *f6 = new TFile("../histoROOTfiles_forPlots/PhotonMC_RunI_OutOfTheBox.root");
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -79,7 +84,7 @@ hDataInKE->Scale(MuonContaminationScaleFactor);
 // ############################################
 // ### Getting the Pion MC Incident KE plot ###
 // ############################################
-TH1F *hPionIncKE = (TH1F*)f2->Get("hdataIncidentKE");
+TH1F *hPionIncKE = (TH1F*)f2->Get("hRecoMCIncidentKE");
 
 // ### Labeling the axis ###
 hPionIncKE->GetXaxis()->SetTitle("Kinetic Energy (MeV)");
@@ -91,7 +96,7 @@ hPionIncKE->GetYaxis()->CenterTitle();
 // ############################################
 // ### Getting the Muon MC Incident KE plot ###
 // ############################################
-TH1F *hMuonMCIncKE = (TH1F*)f3->Get("hdataIncidentKE");
+TH1F *hMuonMCIncKE = (TH1F*)f3->Get("hRecoMCIncidentKE");
 
 // ### Labeling the axis ###
 hMuonMCIncKE->GetXaxis()->SetTitle("Kinetic Energy (MeV)");
@@ -104,7 +109,7 @@ hMuonMCIncKE->GetYaxis()->CenterTitle();
 // ################################################
 // ### Getting the Electron MC Incident KE plot ###
 // ################################################
-TH1F *hElectronMCIncKE = (TH1F*)f4->Get("hdataIncidentKE");
+TH1F *hElectronMCIncKE = (TH1F*)f4->Get("hRecoMCIncidentKE");
 
 // ### Labeling the axis ###
 hElectronMCIncKE->GetXaxis()->SetTitle("Kinetic Energy (MeV)");
@@ -117,7 +122,7 @@ hElectronMCIncKE->GetYaxis()->CenterTitle();
 // ############################################
 // ### Getting the Kaon MC Incident KE plot ###
 // ############################################
-TH1F *hKaonMCIncKE = (TH1F*)f5->Get("hdataIncidentKE");
+TH1F *hKaonMCIncKE = (TH1F*)f5->Get("hRecoMCIncidentKE");
 
 // ### Labeling the axis ###
 hKaonMCIncKE->GetXaxis()->SetTitle("Kinetic Energy (MeV)");
@@ -130,7 +135,7 @@ hKaonMCIncKE->GetYaxis()->CenterTitle();
 // ##############################################
 // ### Getting the Photon MC Incident KE plot ###
 // ##############################################
-TH1F *hPhotonMCIncKE = (TH1F*)f6->Get("hdataIncidentKE");
+TH1F *hPhotonMCIncKE = (TH1F*)f6->Get("hRecoMCIncidentKE");
 
 // ### Labeling the axis ###
 hPhotonMCIncKE->GetXaxis()->SetTitle("Kinetic Energy (MeV)");
