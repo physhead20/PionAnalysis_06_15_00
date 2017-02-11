@@ -1,0 +1,4 @@
+This is where the various data and MC macros will put their ROOT files with all
+the histograms needed for making plots.
+
+This directory will get full of all kinds of histo.root files
