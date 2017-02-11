@@ -1,0 +1,18 @@
+I put any anatree files I want to have locally here.
+
+For this version of the code the anatree files can be found at
+
+Data
+/lariat/data/users/jasaadi/06_15_00_MC/RunI_NegPol_06_15_00
+/lariat/data/users/jasaadi/06_15_00_MC/RunI_PosPol_06_15_00
+/lariat/data/users/jasaadi/06_15_00_MC/RunII_NegPol_06_15_00
+/lariat/data/users/jasaadi/06_15_00_MC/RunII_PosPol_06_15_00
+
+MC
+/lariat/data/users/jasaadi/06_15_00_MC/Cosmics
+/lariat/data/users/jasaadi/06_15_00_MC/ElectronMC
+/lariat/data/users/jasaadi/06_15_00_MC/KaonMinusMC
+/lariat/data/users/jasaadi/06_15_00_MC/MuonMC
+/lariat/data/users/jasaadi/06_15_00_MC/PhotonMC
+/lariat/data/users/jasaadi/06_15_00_MC/PionMC
+/lariat/data/users/jasaadi/06_15_00_MC/ProtonMC
