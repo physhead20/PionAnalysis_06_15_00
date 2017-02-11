@@ -7,11 +7,11 @@
 // ###       spreadsheet goes into these catagories to scale the particle species appropriately
 // ######################################################################################################
 // ######################################################################################################
-double PionPercentage     = 0.22967;
-double MuonPercentage     = 13.2458;
-double ElectronPercentage = 0.59274;
-double PhotonPercentage   = 1.32144;
-double KaonPercentage     = 176.167;
+double PionPercentage     = 0.24841;
+double MuonPercentage     = 14.1409;
+double ElectronPercentage = 0.20639;
+double PhotonPercentage   = 0.54151;
+double KaonPercentage     = 182.123;
 
 /*double PionPercentage     = 1.0;
 double MuonPercentage     = 1.0;

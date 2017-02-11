@@ -44,3 +44,5 @@ ElectronMC/*.so
 ElectronMC/*.d
 ElectronMC/*.gif
 ElectronMC/*.root
+
+CrossSection_Plots/*.gif
