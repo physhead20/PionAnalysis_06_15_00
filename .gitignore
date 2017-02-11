@@ -20,7 +20,12 @@ RunIIPosPolData/*.d
 RunIIPosPolData/*.gif
 RunIIPosPolData/*.root
 
-PiomMC/*.so
-PiomMC/*.d
-PiomMC/*.gif
-PiomMC/*.root
+PionMC/*.so
+PionMC/*.d
+PionMC/*.gif
+PionMC/*.root
+
+MuonMC/*.so
+MuonMC/*.d
+MuonMC/*.gif
+MuonMC/*.root

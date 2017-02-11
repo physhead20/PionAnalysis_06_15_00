@@ -1,0 +1,6 @@
+Since the data file is rather large I am just storing the 
+event reduction table. The output of the macro is stored 
+on the GPVM
+
+The code in this repository is a copy of the code on the GPVM
+

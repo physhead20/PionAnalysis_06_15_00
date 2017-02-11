@@ -1,0 +1,17 @@
+########################################################################
+### Number of Events in AnaModule                                = 199000 ###
+-------------------------------   Stage 0   ----------------------------
+### Number of Events w/ WC Track                                 = 0 ###
+### Number of Events w/ TOF > 0 ns and < 30 ns                   = 0 ###
+### Number of Events w/ Good TPC info (nHits > 0)		     = 0 ###
+-------------------------------   Stage 1   ----------------------------
+### Number of Events w/ PID consistent with Pi/Mu                = 0 ###
+-------------------------------   Stage 2   ----------------------------
+### Number of Events w/ Primary MC which enters the TPC                   = 183124 ###
+### Number of Events w/ Trk Z < 2                                = 168185 ###
+### Number of Events w/ < 4 tracks in the first 14 cm of the TPC = 168178 ###
+### Number of Events that are not Shower Like                        = 167742
+### Number of Events w/ ONE WC Track Matched                     = 161018 ###
+###              ( -4 < Delta X < 6 , -5 < Delta Y < 5 )              ###
+###                 and alpha less the 10 degrees                      ###
+########################################################################
