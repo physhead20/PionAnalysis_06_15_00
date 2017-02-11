@@ -964,7 +964,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // ####################################################### 
       // ### Adding an option to select through-going tracks ###
       // #######################################################
-      if( trkvtxz[nTPCtrk] > 5.0 || trkendz[nTPCtrk] < 88.0 && SelectThroughGoing){continue;}
+      if( (trkvtxz[nTPCtrk] > 5.0 || trkendz[nTPCtrk] < 88.0) && SelectThroughGoing){continue;}
       
       
       // ###############################################################
