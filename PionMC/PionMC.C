@@ -41,6 +41,14 @@ TH1D *hMCPrimaryPy = new TH1D("hMCPrimaryPy", "Primary Particle P_{y}", 300, -15
 /////////////////////////////////// Primary Particle Pz //////////////////////////////////////////
 TH1D *hMCPrimaryPz = new TH1D("hMCPrimaryPz", "Primary Particle P_{z}", 250, 0 , 2500);
 
+
+/////////////////////////////////// Primary Particle Px (unweighted)  //////////////////////////////////////////
+TH1D *hMCPrimaryPxUnWeighted = new TH1D("hMCPrimaryPxUnWeighted", "Primary Particle P_{x} UnWeighted", 300, -150 , 150);
+/////////////////////////////////// Primary Particle Py  //////////////////////////////////////////
+TH1D *hMCPrimaryPyUnWeighted = new TH1D("hMCPrimaryPyUnWeighted", "Primary Particle P_{y} UnWeighted", 300, -159 , 150);
+/////////////////////////////////// Primary Particle Pz //////////////////////////////////////////
+TH1D *hMCPrimaryPzUnWeighted = new TH1D("hMCPrimaryPzUnWeighted", "Primary Particle P_{z} UnWeighted", 250, 0 , 2500);
+
 /////////////////////////////////// Primary Particle Process //////////////////////////////////////////
 TH1D *hMCPrimaryProcess = new TH1D("hMCPrimaryProcess", "Primary Particle Process", 100, 0 , 10);
 
@@ -504,18 +512,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	 g4Primary_Py[nG4Primary] = Py[iG4] * 1000; //<---Converting to MeV
 	 g4Primary_Pz[nG4Primary] = Pz[iG4] * 1000; //<---Converting to MeV
 	 
-	 // ### Setting a global event weight ###
-	 // 100 MeV < P < 200 MeV = 0.02
-   	 // 200 MeV < P < 300 MeV = 0.10
-   	 // 300 MeV < P < 400 MeV = 0.535
-   	 // 400 MeV < P < 500 MeV = 0.84
-   	 // 500 MeV < P < 600 MeV = 0.965
-   	 // 600 MeV < P < 700 MeV = 1.0
-   	 // 700 MeV < P < 800 MeV = 0.62
-   	 // 800 MeV < P < 900 MeV = 0.225
-   	 // 900 MeV < P < 1000MeV = 0.094
-   	 // 1000MeV < P < 1100MeV = 0.0275
-   	 // 1100MeV < P < 1500MeV = 0.01
+	
 	 
 	 // #############################################################
          // ### Calculating the momentum from the MC Primary Particle ###
@@ -550,134 +547,134 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 		if(g4Primary_Pz[nG4Primary] > 100 && g4Primary_Pz[nG4Primary] < 110) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 110 && g4Primary_Pz[nG4Primary] < 120) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 120 && g4Primary_Pz[nG4Primary] < 130) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 130 && g4Primary_Pz[nG4Primary] < 140) {EventWeight = 0.0244033;}
+		if(g4Primary_Pz[nG4Primary] > 130 && g4Primary_Pz[nG4Primary] < 140) {EventWeight = 0.0228321;}
 		if(g4Primary_Pz[nG4Primary] > 140 && g4Primary_Pz[nG4Primary] < 150) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 150 && g4Primary_Pz[nG4Primary] < 160) {EventWeight = 0.0457656;}
-		if(g4Primary_Pz[nG4Primary] > 160 && g4Primary_Pz[nG4Primary] < 170) {EventWeight = 0.102197;}
-		if(g4Primary_Pz[nG4Primary] > 170 && g4Primary_Pz[nG4Primary] < 180) {EventWeight = 0.191723;}
-		if(g4Primary_Pz[nG4Primary] > 180 && g4Primary_Pz[nG4Primary] < 190) {EventWeight = 0.0657011;}
-		if(g4Primary_Pz[nG4Primary] > 190 && g4Primary_Pz[nG4Primary] < 200) {EventWeight = 0.035371;}
-		if(g4Primary_Pz[nG4Primary] > 200 && g4Primary_Pz[nG4Primary] < 210) {EventWeight = 0.0793482;}
-		if(g4Primary_Pz[nG4Primary] > 210 && g4Primary_Pz[nG4Primary] < 220) {EventWeight = 0.114573;}
-		if(g4Primary_Pz[nG4Primary] > 220 && g4Primary_Pz[nG4Primary] < 230) {EventWeight = 0.289287;}
-		if(g4Primary_Pz[nG4Primary] > 230 && g4Primary_Pz[nG4Primary] < 240) {EventWeight = 0.350376;}
-		if(g4Primary_Pz[nG4Primary] > 240 && g4Primary_Pz[nG4Primary] < 250) {EventWeight = 0.459932;}
-		if(g4Primary_Pz[nG4Primary] > 250 && g4Primary_Pz[nG4Primary] < 260) {EventWeight = 0.660959;}
-		if(g4Primary_Pz[nG4Primary] > 260 && g4Primary_Pz[nG4Primary] < 270) {EventWeight = 0.626249;}
-		if(g4Primary_Pz[nG4Primary] > 270 && g4Primary_Pz[nG4Primary] < 280) {EventWeight = 0.874735;}
-		if(g4Primary_Pz[nG4Primary] > 280 && g4Primary_Pz[nG4Primary] < 290) {EventWeight = 0.559648;}
-		if(g4Primary_Pz[nG4Primary] > 290 && g4Primary_Pz[nG4Primary] < 300) {EventWeight = 0.827982;}
-		if(g4Primary_Pz[nG4Primary] > 300 && g4Primary_Pz[nG4Primary] < 310) {EventWeight = 0.594286;}
-		if(g4Primary_Pz[nG4Primary] > 310 && g4Primary_Pz[nG4Primary] < 320) {EventWeight = 0.518904;}
-		if(g4Primary_Pz[nG4Primary] > 320 && g4Primary_Pz[nG4Primary] < 330) {EventWeight = 0.617059;}
-		if(g4Primary_Pz[nG4Primary] > 330 && g4Primary_Pz[nG4Primary] < 340) {EventWeight = 0.554368;}
-		if(g4Primary_Pz[nG4Primary] > 340 && g4Primary_Pz[nG4Primary] < 350) {EventWeight = 0.682744;}
-		if(g4Primary_Pz[nG4Primary] > 350 && g4Primary_Pz[nG4Primary] < 360) {EventWeight = 0.661084;}
-		if(g4Primary_Pz[nG4Primary] > 360 && g4Primary_Pz[nG4Primary] < 370) {EventWeight = 0.901599;}
-		if(g4Primary_Pz[nG4Primary] > 370 && g4Primary_Pz[nG4Primary] < 380) {EventWeight = 0.664525;}
-		if(g4Primary_Pz[nG4Primary] > 380 && g4Primary_Pz[nG4Primary] < 390) {EventWeight = 0.936176;}
-		if(g4Primary_Pz[nG4Primary] > 390 && g4Primary_Pz[nG4Primary] < 400) {EventWeight = 0.89143;}
-		if(g4Primary_Pz[nG4Primary] > 400 && g4Primary_Pz[nG4Primary] < 410) {EventWeight = 0.924021;}
-		if(g4Primary_Pz[nG4Primary] > 410 && g4Primary_Pz[nG4Primary] < 420) {EventWeight = 0.869848;}
-		if(g4Primary_Pz[nG4Primary] > 420 && g4Primary_Pz[nG4Primary] < 430) {EventWeight = 1.00002;}
-		if(g4Primary_Pz[nG4Primary] > 430 && g4Primary_Pz[nG4Primary] < 440) {EventWeight = 0.770581;}
-		if(g4Primary_Pz[nG4Primary] > 440 && g4Primary_Pz[nG4Primary] < 450) {EventWeight = 0.910378;}
-		if(g4Primary_Pz[nG4Primary] > 450 && g4Primary_Pz[nG4Primary] < 460) {EventWeight = 0.624888;}
-		if(g4Primary_Pz[nG4Primary] > 460 && g4Primary_Pz[nG4Primary] < 470) {EventWeight = 0.732138;}
-		if(g4Primary_Pz[nG4Primary] > 470 && g4Primary_Pz[nG4Primary] < 480) {EventWeight = 0.731163;}
-		if(g4Primary_Pz[nG4Primary] > 480 && g4Primary_Pz[nG4Primary] < 490) {EventWeight = 0.678436;}
-		if(g4Primary_Pz[nG4Primary] > 490 && g4Primary_Pz[nG4Primary] < 500) {EventWeight = 0.629604;}
-		if(g4Primary_Pz[nG4Primary] > 500 && g4Primary_Pz[nG4Primary] < 510) {EventWeight = 0.571019;}
-		if(g4Primary_Pz[nG4Primary] > 510 && g4Primary_Pz[nG4Primary] < 520) {EventWeight = 0.462701;}
-		if(g4Primary_Pz[nG4Primary] > 520 && g4Primary_Pz[nG4Primary] < 530) {EventWeight = 0.655837;}
-		if(g4Primary_Pz[nG4Primary] > 530 && g4Primary_Pz[nG4Primary] < 540) {EventWeight = 0.626164;}
-		if(g4Primary_Pz[nG4Primary] > 540 && g4Primary_Pz[nG4Primary] < 550) {EventWeight = 0.731877;}
-		if(g4Primary_Pz[nG4Primary] > 550 && g4Primary_Pz[nG4Primary] < 560) {EventWeight = 0.592955;}
-		if(g4Primary_Pz[nG4Primary] > 560 && g4Primary_Pz[nG4Primary] < 570) {EventWeight = 0.644736;}
-		if(g4Primary_Pz[nG4Primary] > 570 && g4Primary_Pz[nG4Primary] < 580) {EventWeight = 0.77575;}
-		if(g4Primary_Pz[nG4Primary] > 580 && g4Primary_Pz[nG4Primary] < 590) {EventWeight = 0.870475;}
-		if(g4Primary_Pz[nG4Primary] > 590 && g4Primary_Pz[nG4Primary] < 600) {EventWeight = 0.839472;}
-		if(g4Primary_Pz[nG4Primary] > 600 && g4Primary_Pz[nG4Primary] < 610) {EventWeight = 0.839125;}
-		if(g4Primary_Pz[nG4Primary] > 610 && g4Primary_Pz[nG4Primary] < 620) {EventWeight = 0.784815;}
-		if(g4Primary_Pz[nG4Primary] > 620 && g4Primary_Pz[nG4Primary] < 630) {EventWeight = 0.714622;}
-		if(g4Primary_Pz[nG4Primary] > 630 && g4Primary_Pz[nG4Primary] < 640) {EventWeight = 0.710843;}
-		if(g4Primary_Pz[nG4Primary] > 640 && g4Primary_Pz[nG4Primary] < 650) {EventWeight = 0.840885;}
-		if(g4Primary_Pz[nG4Primary] > 650 && g4Primary_Pz[nG4Primary] < 660) {EventWeight = 0.643203;}
-		if(g4Primary_Pz[nG4Primary] > 660 && g4Primary_Pz[nG4Primary] < 670) {EventWeight = 0.835553;}
-		if(g4Primary_Pz[nG4Primary] > 670 && g4Primary_Pz[nG4Primary] < 680) {EventWeight = 0.881446;}
-		if(g4Primary_Pz[nG4Primary] > 680 && g4Primary_Pz[nG4Primary] < 690) {EventWeight = 0.68384;}
-		if(g4Primary_Pz[nG4Primary] > 690 && g4Primary_Pz[nG4Primary] < 700) {EventWeight = 0.703535;}
-		if(g4Primary_Pz[nG4Primary] > 700 && g4Primary_Pz[nG4Primary] < 710) {EventWeight = 0.598158;}
-		if(g4Primary_Pz[nG4Primary] > 710 && g4Primary_Pz[nG4Primary] < 720) {EventWeight = 0.566885;}
-		if(g4Primary_Pz[nG4Primary] > 720 && g4Primary_Pz[nG4Primary] < 730) {EventWeight = 0.687499;}
-		if(g4Primary_Pz[nG4Primary] > 730 && g4Primary_Pz[nG4Primary] < 740) {EventWeight = 0.603899;}
-		if(g4Primary_Pz[nG4Primary] > 740 && g4Primary_Pz[nG4Primary] < 750) {EventWeight = 0.572216;}
-		if(g4Primary_Pz[nG4Primary] > 750 && g4Primary_Pz[nG4Primary] < 760) {EventWeight = 0.368385;}
-		if(g4Primary_Pz[nG4Primary] > 760 && g4Primary_Pz[nG4Primary] < 770) {EventWeight = 0.382572;}
-		if(g4Primary_Pz[nG4Primary] > 770 && g4Primary_Pz[nG4Primary] < 780) {EventWeight = 0.529715;}
-		if(g4Primary_Pz[nG4Primary] > 780 && g4Primary_Pz[nG4Primary] < 790) {EventWeight = 0.47551;}
-		if(g4Primary_Pz[nG4Primary] > 790 && g4Primary_Pz[nG4Primary] < 800) {EventWeight = 0.440723;}
-		if(g4Primary_Pz[nG4Primary] > 800 && g4Primary_Pz[nG4Primary] < 810) {EventWeight = 0.44711;}
-		if(g4Primary_Pz[nG4Primary] > 810 && g4Primary_Pz[nG4Primary] < 820) {EventWeight = 0.459863;}
-		if(g4Primary_Pz[nG4Primary] > 820 && g4Primary_Pz[nG4Primary] < 830) {EventWeight = 0.380781;}
-		if(g4Primary_Pz[nG4Primary] > 830 && g4Primary_Pz[nG4Primary] < 840) {EventWeight = 0.37581;}
-		if(g4Primary_Pz[nG4Primary] > 840 && g4Primary_Pz[nG4Primary] < 850) {EventWeight = 0.383345;}
-		if(g4Primary_Pz[nG4Primary] > 850 && g4Primary_Pz[nG4Primary] < 860) {EventWeight = 0.24104;}
-		if(g4Primary_Pz[nG4Primary] > 860 && g4Primary_Pz[nG4Primary] < 870) {EventWeight = 0.328144;}
-		if(g4Primary_Pz[nG4Primary] > 870 && g4Primary_Pz[nG4Primary] < 880) {EventWeight = 0.288999;}
-		if(g4Primary_Pz[nG4Primary] > 880 && g4Primary_Pz[nG4Primary] < 890) {EventWeight = 0.263563;}
-		if(g4Primary_Pz[nG4Primary] > 890 && g4Primary_Pz[nG4Primary] < 900) {EventWeight = 0.288733;}
-		if(g4Primary_Pz[nG4Primary] > 900 && g4Primary_Pz[nG4Primary] < 910) {EventWeight = 0.221915;}
-		if(g4Primary_Pz[nG4Primary] > 910 && g4Primary_Pz[nG4Primary] < 920) {EventWeight = 0.165065;}
-		if(g4Primary_Pz[nG4Primary] > 920 && g4Primary_Pz[nG4Primary] < 930) {EventWeight = 0.180034;}
-		if(g4Primary_Pz[nG4Primary] > 930 && g4Primary_Pz[nG4Primary] < 940) {EventWeight = 0.157056;}
-		if(g4Primary_Pz[nG4Primary] > 940 && g4Primary_Pz[nG4Primary] < 950) {EventWeight = 0.122627;}
-		if(g4Primary_Pz[nG4Primary] > 950 && g4Primary_Pz[nG4Primary] < 960) {EventWeight = 0.0759867;}
-		if(g4Primary_Pz[nG4Primary] > 960 && g4Primary_Pz[nG4Primary] < 970) {EventWeight = 0.124077;}
-		if(g4Primary_Pz[nG4Primary] > 970 && g4Primary_Pz[nG4Primary] < 980) {EventWeight = 0.0745724;}
-		if(g4Primary_Pz[nG4Primary] > 980 && g4Primary_Pz[nG4Primary] < 990) {EventWeight = 0.0915312;}
-		if(g4Primary_Pz[nG4Primary] > 990 && g4Primary_Pz[nG4Primary] < 1000) {EventWeight = 0.0722496;}
-		if(g4Primary_Pz[nG4Primary] > 1000 && g4Primary_Pz[nG4Primary] < 1010) {EventWeight = 0.0610081;}
-		if(g4Primary_Pz[nG4Primary] > 1010 && g4Primary_Pz[nG4Primary] < 1020) {EventWeight = 0.107668;}
-		if(g4Primary_Pz[nG4Primary] > 1020 && g4Primary_Pz[nG4Primary] < 1030) {EventWeight = 0.0578376;}
-		if(g4Primary_Pz[nG4Primary] > 1030 && g4Primary_Pz[nG4Primary] < 1040) {EventWeight = 0.038059;}
-		if(g4Primary_Pz[nG4Primary] > 1040 && g4Primary_Pz[nG4Primary] < 1050) {EventWeight = 0.0485645;}
-		if(g4Primary_Pz[nG4Primary] > 1050 && g4Primary_Pz[nG4Primary] < 1060) {EventWeight = 0.0249843;}
-		if(g4Primary_Pz[nG4Primary] > 1060 && g4Primary_Pz[nG4Primary] < 1070) {EventWeight = 0.0490509;}
-		if(g4Primary_Pz[nG4Primary] > 1070 && g4Primary_Pz[nG4Primary] < 1080) {EventWeight = 0.0254165;}
-		if(g4Primary_Pz[nG4Primary] > 1080 && g4Primary_Pz[nG4Primary] < 1090) {EventWeight = 0.0488877;}
+		if(g4Primary_Pz[nG4Primary] > 150 && g4Primary_Pz[nG4Primary] < 160) {EventWeight = 0.0442183;}
+		if(g4Primary_Pz[nG4Primary] > 160 && g4Primary_Pz[nG4Primary] < 170) {EventWeight = 0.0899994;}
+		if(g4Primary_Pz[nG4Primary] > 170 && g4Primary_Pz[nG4Primary] < 180) {EventWeight = 0.179999;}
+		if(g4Primary_Pz[nG4Primary] > 180 && g4Primary_Pz[nG4Primary] < 190) {EventWeight = 0.055386;}
+		if(g4Primary_Pz[nG4Primary] > 190 && g4Primary_Pz[nG4Primary] < 200) {EventWeight = 0.0328284;}
+		if(g4Primary_Pz[nG4Primary] > 200 && g4Primary_Pz[nG4Primary] < 210) {EventWeight = 0.0831581;}
+		if(g4Primary_Pz[nG4Primary] > 210 && g4Primary_Pz[nG4Primary] < 220) {EventWeight = 0.105186;}
+		if(g4Primary_Pz[nG4Primary] > 220 && g4Primary_Pz[nG4Primary] < 230) {EventWeight = 0.266505;}
+		if(g4Primary_Pz[nG4Primary] > 230 && g4Primary_Pz[nG4Primary] < 240) {EventWeight = 0.311757;}
+		if(g4Primary_Pz[nG4Primary] > 240 && g4Primary_Pz[nG4Primary] < 250) {EventWeight = 0.404355;}
+		if(g4Primary_Pz[nG4Primary] > 250 && g4Primary_Pz[nG4Primary] < 260) {EventWeight = 0.584698;}
+		if(g4Primary_Pz[nG4Primary] > 260 && g4Primary_Pz[nG4Primary] < 270) {EventWeight = 0.566496;}
+		if(g4Primary_Pz[nG4Primary] > 270 && g4Primary_Pz[nG4Primary] < 280) {EventWeight = 0.822099;}
+		if(g4Primary_Pz[nG4Primary] > 280 && g4Primary_Pz[nG4Primary] < 290) {EventWeight = 0.573374;}
+		if(g4Primary_Pz[nG4Primary] > 290 && g4Primary_Pz[nG4Primary] < 300) {EventWeight = 0.781806;}
+		if(g4Primary_Pz[nG4Primary] > 300 && g4Primary_Pz[nG4Primary] < 310) {EventWeight = 0.581851;}
+		if(g4Primary_Pz[nG4Primary] > 310 && g4Primary_Pz[nG4Primary] < 320) {EventWeight = 0.526497;}
+		if(g4Primary_Pz[nG4Primary] > 320 && g4Primary_Pz[nG4Primary] < 330) {EventWeight = 0.562204;}
+		if(g4Primary_Pz[nG4Primary] > 330 && g4Primary_Pz[nG4Primary] < 340) {EventWeight = 0.523858;}
+		if(g4Primary_Pz[nG4Primary] > 340 && g4Primary_Pz[nG4Primary] < 350) {EventWeight = 0.640511;}
+		if(g4Primary_Pz[nG4Primary] > 350 && g4Primary_Pz[nG4Primary] < 360) {EventWeight = 0.598169;}
+		if(g4Primary_Pz[nG4Primary] > 360 && g4Primary_Pz[nG4Primary] < 370) {EventWeight = 0.794736;}
+		if(g4Primary_Pz[nG4Primary] > 370 && g4Primary_Pz[nG4Primary] < 380) {EventWeight = 0.628037;}
+		if(g4Primary_Pz[nG4Primary] > 380 && g4Primary_Pz[nG4Primary] < 390) {EventWeight = 0.857005;}
+		if(g4Primary_Pz[nG4Primary] > 390 && g4Primary_Pz[nG4Primary] < 400) {EventWeight = 0.893923;}
+		if(g4Primary_Pz[nG4Primary] > 400 && g4Primary_Pz[nG4Primary] < 410) {EventWeight = 0.920314;}
+		if(g4Primary_Pz[nG4Primary] > 410 && g4Primary_Pz[nG4Primary] < 420) {EventWeight = 0.815078;}
+		if(g4Primary_Pz[nG4Primary] > 420 && g4Primary_Pz[nG4Primary] < 430) {EventWeight = 1.00009;}
+		if(g4Primary_Pz[nG4Primary] > 430 && g4Primary_Pz[nG4Primary] < 440) {EventWeight = 0.707796;}
+		if(g4Primary_Pz[nG4Primary] > 440 && g4Primary_Pz[nG4Primary] < 450) {EventWeight = 0.782991;}
+		if(g4Primary_Pz[nG4Primary] > 450 && g4Primary_Pz[nG4Primary] < 460) {EventWeight = 0.618758;}
+		if(g4Primary_Pz[nG4Primary] > 460 && g4Primary_Pz[nG4Primary] < 470) {EventWeight = 0.676402;}
+		if(g4Primary_Pz[nG4Primary] > 470 && g4Primary_Pz[nG4Primary] < 480) {EventWeight = 0.78863;}
+		if(g4Primary_Pz[nG4Primary] > 480 && g4Primary_Pz[nG4Primary] < 490) {EventWeight = 0.587439;}
+		if(g4Primary_Pz[nG4Primary] > 490 && g4Primary_Pz[nG4Primary] < 500) {EventWeight = 0.54913;}
+		if(g4Primary_Pz[nG4Primary] > 500 && g4Primary_Pz[nG4Primary] < 510) {EventWeight = 0.591537;}
+		if(g4Primary_Pz[nG4Primary] > 510 && g4Primary_Pz[nG4Primary] < 520) {EventWeight = 0.484767;}
+		if(g4Primary_Pz[nG4Primary] > 520 && g4Primary_Pz[nG4Primary] < 530) {EventWeight = 0.711151;}
+		if(g4Primary_Pz[nG4Primary] > 530 && g4Primary_Pz[nG4Primary] < 540) {EventWeight = 0.688821;}
+		if(g4Primary_Pz[nG4Primary] > 540 && g4Primary_Pz[nG4Primary] < 550) {EventWeight = 0.698631;}
+		if(g4Primary_Pz[nG4Primary] > 550 && g4Primary_Pz[nG4Primary] < 560) {EventWeight = 0.602613;}
+		if(g4Primary_Pz[nG4Primary] > 560 && g4Primary_Pz[nG4Primary] < 570) {EventWeight = 0.717226;}
+		if(g4Primary_Pz[nG4Primary] > 570 && g4Primary_Pz[nG4Primary] < 580) {EventWeight = 0.861487;}
+		if(g4Primary_Pz[nG4Primary] > 580 && g4Primary_Pz[nG4Primary] < 590) {EventWeight = 0.861546;}
+		if(g4Primary_Pz[nG4Primary] > 590 && g4Primary_Pz[nG4Primary] < 600) {EventWeight = 0.828745;}
+		if(g4Primary_Pz[nG4Primary] > 600 && g4Primary_Pz[nG4Primary] < 610) {EventWeight = 0.879562;}
+		if(g4Primary_Pz[nG4Primary] > 610 && g4Primary_Pz[nG4Primary] < 620) {EventWeight = 0.776497;}
+		if(g4Primary_Pz[nG4Primary] > 620 && g4Primary_Pz[nG4Primary] < 630) {EventWeight = 0.723076;}
+		if(g4Primary_Pz[nG4Primary] > 630 && g4Primary_Pz[nG4Primary] < 640) {EventWeight = 0.719098;}
+		if(g4Primary_Pz[nG4Primary] > 640 && g4Primary_Pz[nG4Primary] < 650) {EventWeight = 0.827812;}
+		if(g4Primary_Pz[nG4Primary] > 650 && g4Primary_Pz[nG4Primary] < 660) {EventWeight = 0.651954;}
+		if(g4Primary_Pz[nG4Primary] > 660 && g4Primary_Pz[nG4Primary] < 670) {EventWeight = 0.862191;}
+		if(g4Primary_Pz[nG4Primary] > 670 && g4Primary_Pz[nG4Primary] < 680) {EventWeight = 0.810761;}
+		if(g4Primary_Pz[nG4Primary] > 680 && g4Primary_Pz[nG4Primary] < 690) {EventWeight = 0.736738;}
+		if(g4Primary_Pz[nG4Primary] > 690 && g4Primary_Pz[nG4Primary] < 700) {EventWeight = 0.753865;}
+		if(g4Primary_Pz[nG4Primary] > 700 && g4Primary_Pz[nG4Primary] < 710) {EventWeight = 0.594639;}
+		if(g4Primary_Pz[nG4Primary] > 710 && g4Primary_Pz[nG4Primary] < 720) {EventWeight = 0.587361;}
+		if(g4Primary_Pz[nG4Primary] > 720 && g4Primary_Pz[nG4Primary] < 730) {EventWeight = 0.731766;}
+		if(g4Primary_Pz[nG4Primary] > 730 && g4Primary_Pz[nG4Primary] < 740) {EventWeight = 0.633571;}
+		if(g4Primary_Pz[nG4Primary] > 740 && g4Primary_Pz[nG4Primary] < 750) {EventWeight = 0.588567;}
+		if(g4Primary_Pz[nG4Primary] > 750 && g4Primary_Pz[nG4Primary] < 760) {EventWeight = 0.39815;}
+		if(g4Primary_Pz[nG4Primary] > 760 && g4Primary_Pz[nG4Primary] < 770) {EventWeight = 0.392117;}
+		if(g4Primary_Pz[nG4Primary] > 770 && g4Primary_Pz[nG4Primary] < 780) {EventWeight = 0.581851;}
+		if(g4Primary_Pz[nG4Primary] > 780 && g4Primary_Pz[nG4Primary] < 790) {EventWeight = 0.47054;}
+		if(g4Primary_Pz[nG4Primary] > 790 && g4Primary_Pz[nG4Primary] < 800) {EventWeight = 0.404462;}
+		if(g4Primary_Pz[nG4Primary] > 800 && g4Primary_Pz[nG4Primary] < 810) {EventWeight = 0.44199;}
+		if(g4Primary_Pz[nG4Primary] > 810 && g4Primary_Pz[nG4Primary] < 820) {EventWeight = 0.464536;}
+		if(g4Primary_Pz[nG4Primary] > 820 && g4Primary_Pz[nG4Primary] < 830) {EventWeight = 0.383423;}
+		if(g4Primary_Pz[nG4Primary] > 830 && g4Primary_Pz[nG4Primary] < 840) {EventWeight = 0.396822;}
+		if(g4Primary_Pz[nG4Primary] > 840 && g4Primary_Pz[nG4Primary] < 850) {EventWeight = 0.400831;}
+		if(g4Primary_Pz[nG4Primary] > 850 && g4Primary_Pz[nG4Primary] < 860) {EventWeight = 0.23581;}
+		if(g4Primary_Pz[nG4Primary] > 860 && g4Primary_Pz[nG4Primary] < 870) {EventWeight = 0.332212;}
+		if(g4Primary_Pz[nG4Primary] > 870 && g4Primary_Pz[nG4Primary] < 880) {EventWeight = 0.296505;}
+		if(g4Primary_Pz[nG4Primary] > 880 && g4Primary_Pz[nG4Primary] < 890) {EventWeight = 0.280943;}
+		if(g4Primary_Pz[nG4Primary] > 890 && g4Primary_Pz[nG4Primary] < 900) {EventWeight = 0.304001;}
+		if(g4Primary_Pz[nG4Primary] > 900 && g4Primary_Pz[nG4Primary] < 910) {EventWeight = 0.261096;}
+		if(g4Primary_Pz[nG4Primary] > 910 && g4Primary_Pz[nG4Primary] < 920) {EventWeight = 0.177625;}
+		if(g4Primary_Pz[nG4Primary] > 920 && g4Primary_Pz[nG4Primary] < 930) {EventWeight = 0.194882;}
+		if(g4Primary_Pz[nG4Primary] > 930 && g4Primary_Pz[nG4Primary] < 940) {EventWeight = 0.160424;}
+		if(g4Primary_Pz[nG4Primary] > 940 && g4Primary_Pz[nG4Primary] < 950) {EventWeight = 0.119059;}
+		if(g4Primary_Pz[nG4Primary] > 950 && g4Primary_Pz[nG4Primary] < 960) {EventWeight = 0.0738732;}
+		if(g4Primary_Pz[nG4Primary] > 960 && g4Primary_Pz[nG4Primary] < 970) {EventWeight = 0.122843;}
+		if(g4Primary_Pz[nG4Primary] > 970 && g4Primary_Pz[nG4Primary] < 980) {EventWeight = 0.0734554;}
+		if(g4Primary_Pz[nG4Primary] > 980 && g4Primary_Pz[nG4Primary] < 990) {EventWeight = 0.0963064;}
+		if(g4Primary_Pz[nG4Primary] > 990 && g4Primary_Pz[nG4Primary] < 1000) {EventWeight = 0.0747233;}
+		if(g4Primary_Pz[nG4Primary] > 1000 && g4Primary_Pz[nG4Primary] < 1010) {EventWeight = 0.0635119;}
+		if(g4Primary_Pz[nG4Primary] > 1010 && g4Primary_Pz[nG4Primary] < 1020) {EventWeight = 0.112864;}
+		if(g4Primary_Pz[nG4Primary] > 1020 && g4Primary_Pz[nG4Primary] < 1030) {EventWeight = 0.0575049;}
+		if(g4Primary_Pz[nG4Primary] > 1030 && g4Primary_Pz[nG4Primary] < 1040) {EventWeight = 0.0363169;}
+		if(g4Primary_Pz[nG4Primary] > 1040 && g4Primary_Pz[nG4Primary] < 1050) {EventWeight = 0.0481532;}
+		if(g4Primary_Pz[nG4Primary] > 1050 && g4Primary_Pz[nG4Primary] < 1060) {EventWeight = 0.025676;}
+		if(g4Primary_Pz[nG4Primary] > 1060 && g4Primary_Pz[nG4Primary] < 1070) {EventWeight = 0.0490813;}
+		if(g4Primary_Pz[nG4Primary] > 1070 && g4Primary_Pz[nG4Primary] < 1080) {EventWeight = 0.0256152;}
+		if(g4Primary_Pz[nG4Primary] > 1080 && g4Primary_Pz[nG4Primary] < 1090) {EventWeight = 0.0496442;}
 		if(g4Primary_Pz[nG4Primary] > 1090 && g4Primary_Pz[nG4Primary] < 1100) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1100 && g4Primary_Pz[nG4Primary] < 1110) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1110 && g4Primary_Pz[nG4Primary] < 1120) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1120 && g4Primary_Pz[nG4Primary] < 1130) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1130 && g4Primary_Pz[nG4Primary] < 1140) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1140 && g4Primary_Pz[nG4Primary] < 1150) {EventWeight = 0.037928;}
+		if(g4Primary_Pz[nG4Primary] > 1140 && g4Primary_Pz[nG4Primary] < 1150) {EventWeight = 0.0420017;}
 		if(g4Primary_Pz[nG4Primary] > 1150 && g4Primary_Pz[nG4Primary] < 1160) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1160 && g4Primary_Pz[nG4Primary] < 1170) {EventWeight = 0.0123452;}
+		if(g4Primary_Pz[nG4Primary] > 1160 && g4Primary_Pz[nG4Primary] < 1170) {EventWeight = 0.0124253;}
 		if(g4Primary_Pz[nG4Primary] > 1170 && g4Primary_Pz[nG4Primary] < 1180) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1180 && g4Primary_Pz[nG4Primary] < 1190) {EventWeight = 0.0128416;}
-		if(g4Primary_Pz[nG4Primary] > 1190 && g4Primary_Pz[nG4Primary] < 1200) {EventWeight = 0.0110623;}
+		if(g4Primary_Pz[nG4Primary] > 1180 && g4Primary_Pz[nG4Primary] < 1190) {EventWeight = 0.012838;}
+		if(g4Primary_Pz[nG4Primary] > 1190 && g4Primary_Pz[nG4Primary] < 1200) {EventWeight = 0.0126726;}
 		if(g4Primary_Pz[nG4Primary] > 1200 && g4Primary_Pz[nG4Primary] < 1210) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1210 && g4Primary_Pz[nG4Primary] < 1220) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1220 && g4Primary_Pz[nG4Primary] < 1230) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1230 && g4Primary_Pz[nG4Primary] < 1240) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1240 && g4Primary_Pz[nG4Primary] < 1250) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1250 && g4Primary_Pz[nG4Primary] < 1260) {EventWeight = 0.0112143;}
+		if(g4Primary_Pz[nG4Primary] > 1250 && g4Primary_Pz[nG4Primary] < 1260) {EventWeight = 0.0124396;}
 		if(g4Primary_Pz[nG4Primary] > 1260 && g4Primary_Pz[nG4Primary] < 1270) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1270 && g4Primary_Pz[nG4Primary] < 1280) {EventWeight = 0.0259554;}
+		if(g4Primary_Pz[nG4Primary] > 1270 && g4Primary_Pz[nG4Primary] < 1280) {EventWeight = 0.0237856;}
 		if(g4Primary_Pz[nG4Primary] > 1280 && g4Primary_Pz[nG4Primary] < 1290) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1290 && g4Primary_Pz[nG4Primary] < 1300) {EventWeight = 0.011353;}
+		if(g4Primary_Pz[nG4Primary] > 1290 && g4Primary_Pz[nG4Primary] < 1300) {EventWeight = 0.0121737;}
 		if(g4Primary_Pz[nG4Primary] > 1300 && g4Primary_Pz[nG4Primary] < 1310) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1310 && g4Primary_Pz[nG4Primary] < 1320) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1320 && g4Primary_Pz[nG4Primary] < 1330) {EventWeight = 0.0255491;}
+		if(g4Primary_Pz[nG4Primary] > 1320 && g4Primary_Pz[nG4Primary] < 1330) {EventWeight = 0.0251392;}
 		if(g4Primary_Pz[nG4Primary] > 1330 && g4Primary_Pz[nG4Primary] < 1340) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1340 && g4Primary_Pz[nG4Primary] < 1350) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1350 && g4Primary_Pz[nG4Primary] < 1360) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1360 && g4Primary_Pz[nG4Primary] < 1370) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1370 && g4Primary_Pz[nG4Primary] < 1380) {EventWeight = 0.0258186;}
+		if(g4Primary_Pz[nG4Primary] > 1370 && g4Primary_Pz[nG4Primary] < 1380) {EventWeight = 0.0254048;}
 		if(g4Primary_Pz[nG4Primary] > 1380 && g4Primary_Pz[nG4Primary] < 1390) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1390 && g4Primary_Pz[nG4Primary] < 1400) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1400 && g4Primary_Pz[nG4Primary] < 1410) {EventWeight = 0.0114414;}
+		if(g4Primary_Pz[nG4Primary] > 1400 && g4Primary_Pz[nG4Primary] < 1410) {EventWeight = 0.013166;}
 		if(g4Primary_Pz[nG4Primary] > 1410 && g4Primary_Pz[nG4Primary] < 1420) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1420 && g4Primary_Pz[nG4Primary] < 1430) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1430 && g4Primary_Pz[nG4Primary] < 1440) {EventWeight = 0;}
@@ -685,7 +682,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 		if(g4Primary_Pz[nG4Primary] > 1450 && g4Primary_Pz[nG4Primary] < 1460) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1460 && g4Primary_Pz[nG4Primary] < 1470) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1470 && g4Primary_Pz[nG4Primary] < 1480) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1480 && g4Primary_Pz[nG4Primary] < 1490) {EventWeight = 0.0117526;}
+		if(g4Primary_Pz[nG4Primary] > 1480 && g4Primary_Pz[nG4Primary] < 1490) {EventWeight = 0.0125842;}
 		if(g4Primary_Pz[nG4Primary] > 1490 && g4Primary_Pz[nG4Primary] < 1500) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1500 && g4Primary_Pz[nG4Primary] < 1510) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1510 && g4Primary_Pz[nG4Primary] < 1520) {EventWeight = 0;}
@@ -694,7 +691,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 		if(g4Primary_Pz[nG4Primary] > 1540 && g4Primary_Pz[nG4Primary] < 1550) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1550 && g4Primary_Pz[nG4Primary] < 1560) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1560 && g4Primary_Pz[nG4Primary] < 1570) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1570 && g4Primary_Pz[nG4Primary] < 1580) {EventWeight = 0.0124921;}
+		if(g4Primary_Pz[nG4Primary] > 1570 && g4Primary_Pz[nG4Primary] < 1580) {EventWeight = 0.0126726;}
 		if(g4Primary_Pz[nG4Primary] > 1580 && g4Primary_Pz[nG4Primary] < 1590) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1590 && g4Primary_Pz[nG4Primary] < 1600) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1600 && g4Primary_Pz[nG4Primary] < 1610) {EventWeight = 0;}
@@ -709,10 +706,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 		if(g4Primary_Pz[nG4Primary] > 1690 && g4Primary_Pz[nG4Primary] < 1700) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1700 && g4Primary_Pz[nG4Primary] < 1710) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1710 && g4Primary_Pz[nG4Primary] < 1720) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1720 && g4Primary_Pz[nG4Primary] < 1730) {EventWeight = 0.0121814;}
-		if(g4Primary_Pz[nG4Primary] > 1730 && g4Primary_Pz[nG4Primary] < 1740) {EventWeight = 0;}		
+		if(g4Primary_Pz[nG4Primary] > 1720 && g4Primary_Pz[nG4Primary] < 1730) {EventWeight = 0.0127925;}
+		if(g4Primary_Pz[nG4Primary] > 1730 && g4Primary_Pz[nG4Primary] < 1740) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1740 && g4Primary_Pz[nG4Primary] < 1750) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 1750 && g4Primary_Pz[nG4Primary] < 1760) {EventWeight = 0.0121814;}
+		if(g4Primary_Pz[nG4Primary] > 1750 && g4Primary_Pz[nG4Primary] < 1760) {EventWeight = 0.0125989;}
 		if(g4Primary_Pz[nG4Primary] > 1760 && g4Primary_Pz[nG4Primary] < 1770) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1770 && g4Primary_Pz[nG4Primary] < 1780) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 1780 && g4Primary_Pz[nG4Primary] < 1790) {EventWeight = 0;}
@@ -744,7 +741,49 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 		if(g4Primary_Pz[nG4Primary] > 2040 && g4Primary_Pz[nG4Primary] < 2050) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 2050 && g4Primary_Pz[nG4Primary] < 2060) {EventWeight = 0;}
 		if(g4Primary_Pz[nG4Primary] > 2060 && g4Primary_Pz[nG4Primary] < 2070) {EventWeight = 0;}
-		if(g4Primary_Pz[nG4Primary] > 2070) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2070 && g4Primary_Pz[nG4Primary] < 2080) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2080 && g4Primary_Pz[nG4Primary] < 2090) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2090 && g4Primary_Pz[nG4Primary] < 2100) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2100 && g4Primary_Pz[nG4Primary] < 2110) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2110 && g4Primary_Pz[nG4Primary] < 2120) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2120 && g4Primary_Pz[nG4Primary] < 2130) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2130 && g4Primary_Pz[nG4Primary] < 2140) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2140 && g4Primary_Pz[nG4Primary] < 2150) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2150 && g4Primary_Pz[nG4Primary] < 2160) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2160 && g4Primary_Pz[nG4Primary] < 2170) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2170 && g4Primary_Pz[nG4Primary] < 2180) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2180 && g4Primary_Pz[nG4Primary] < 2190) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2190 && g4Primary_Pz[nG4Primary] < 2200) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2200 && g4Primary_Pz[nG4Primary] < 2210) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2210 && g4Primary_Pz[nG4Primary] < 2220) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2220 && g4Primary_Pz[nG4Primary] < 2230) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2230 && g4Primary_Pz[nG4Primary] < 2240) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2240 && g4Primary_Pz[nG4Primary] < 2250) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2250 && g4Primary_Pz[nG4Primary] < 2260) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2260 && g4Primary_Pz[nG4Primary] < 2270) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2270 && g4Primary_Pz[nG4Primary] < 2280) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2280 && g4Primary_Pz[nG4Primary] < 2290) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2290 && g4Primary_Pz[nG4Primary] < 2300) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2300 && g4Primary_Pz[nG4Primary] < 2310) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2310 && g4Primary_Pz[nG4Primary] < 2320) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2320 && g4Primary_Pz[nG4Primary] < 2330) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2330 && g4Primary_Pz[nG4Primary] < 2340) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2340 && g4Primary_Pz[nG4Primary] < 2350) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2350 && g4Primary_Pz[nG4Primary] < 2360) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2360 && g4Primary_Pz[nG4Primary] < 2370) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2370 && g4Primary_Pz[nG4Primary] < 2380) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2380 && g4Primary_Pz[nG4Primary] < 2390) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2390 && g4Primary_Pz[nG4Primary] < 2400) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2400 && g4Primary_Pz[nG4Primary] < 2410) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2410 && g4Primary_Pz[nG4Primary] < 2420) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2420 && g4Primary_Pz[nG4Primary] < 2430) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2430 && g4Primary_Pz[nG4Primary] < 2440) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2440 && g4Primary_Pz[nG4Primary] < 2450) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2450 && g4Primary_Pz[nG4Primary] < 2460) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2460 && g4Primary_Pz[nG4Primary] < 2470) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2470 && g4Primary_Pz[nG4Primary] < 2480) {EventWeight = 0;}
+		if(g4Primary_Pz[nG4Primary] > 2480 && g4Primary_Pz[nG4Primary] < 2490) {EventWeight = 0;}
+
 
 		}//<---End Scaling based on Momentum
 	       
@@ -1251,6 +1290,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	 hMCPrimaryPx->Fill(g4Primary_Px[nG4Primary], EventWeight);
 	 hMCPrimaryPy->Fill(g4Primary_Py[nG4Primary], EventWeight);
 	 hMCPrimaryPz->Fill(g4Primary_Pz[nG4Primary], EventWeight);
+	 
+	 hMCPrimaryPxUnWeighted->Fill(g4Primary_Px[nG4Primary]);
+	 hMCPrimaryPyUnWeighted->Fill(g4Primary_Py[nG4Primary]);
+	 hMCPrimaryPzUnWeighted->Fill(g4Primary_Pz[nG4Primary]);
 
 	 hMCPrimaryStartX->Fill(StartPointx[iG4]);
 	 hMCPrimaryStartY->Fill(StartPointy[iG4]);
@@ -2372,6 +2415,10 @@ hMCPrimaryPx->Write();
 hMCPrimaryPy->Write();
 hMCPrimaryPz->Write();
 hMCTrueLength->Write();
+
+hMCPrimaryPxUnWeighted->Write();
+hMCPrimaryPyUnWeighted->Write();
+hMCPrimaryPzUnWeighted->Write();
 
 hRecoMCUpstreamZPos->Write();
 hRecoMCTPCTheta->Write();

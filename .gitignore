@@ -19,3 +19,8 @@ RunIIPosPolData/*.so
 RunIIPosPolData/*.d
 RunIIPosPolData/*.gif
 RunIIPosPolData/*.root
+
+PiomMC/*.so
+PiomMC/*.d
+PiomMC/*.gif
+PiomMC/*.root
