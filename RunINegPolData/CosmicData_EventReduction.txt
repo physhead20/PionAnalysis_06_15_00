@@ -1,0 +1,6 @@
+########################################################################
+### Number of Events in AnaModule                                = 712881 ###
+### Number of Events w/o a WC Track                              = 644795 ###
+### Number of Events w/o a TOF Object                            = 117489 ###
+### Number of Events w exactly one track reconstructed           = 5415 ###
+### Number of Events which have a Delta Y > 35 cm                = 1559 ###

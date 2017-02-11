@@ -7,14 +7,13 @@
 // #######################
 // ### Load Data Plots ###
 // #######################
-TFile *f1 = new TFile("./histo_ROOTFILES/Data_RunIOutofthebox_ThroughGoingTracks.root");
+TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_CosmicTrackSample.root");
 
-// ###################################
-// ### Load Pion Monte Carlo Plots ###
-// ###################################
-TFile *f2 = new TFile("./histo_ROOTFILES/PionMC_RunI_Scalings_ThroughGoing.root");
-//TFile *f2 = new TFile("./histo_ROOTFILES/PionMC_RunI_AllScalings_CaloFixes.root");
-//TFile *f2 = new TFile("./histo_ROOTFILES/PionMC_RunI_OutOfTheBox_ThroughGoing.root");
+// #####################################
+// ### Load Cosmic Monte Carlo Plots ###
+// #####################################
+TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root");
+
 
 //--------------------------------------------------------------------------------------------------------------
 //						dE/dX Plots
@@ -31,7 +30,7 @@ hDatadEdX->GetYaxis()->SetTitle("Events / 0.25 MeV/cm");
 hDatadEdX->GetYaxis()->CenterTitle(); 
 
 // ### Getting the MC dE/dX plot ###
-TH1F *hMCdEdX = (TH1F*)f2->Get("hRecoMCdEdX");
+TH1F *hMCdEdX = (TH1F*)f2->Get("hMCRecodEdX");
 
 // ### Labeling the axis ###
 hMCdEdX->GetXaxis()->SetTitle("dE/dX (MeV / cm)");
@@ -154,9 +153,9 @@ hMCdEdX->SetLineWidth(3);
 
 hDatadEdX->SetLineColor(kBlack);
 hDatadEdX->SetLineStyle(0);
-hDatadEdX->SetLineWidth(3);
+hDatadEdX->SetLineWidth(1);
 hDatadEdX->SetMarkerStyle(8);
-hDatadEdX->SetMarkerSize(0.9);
+hDatadEdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hMCdEdX->Draw("histo");
@@ -328,9 +327,9 @@ hMCdEdX->SetLineWidth(3);
 
 hDatadEdX->SetLineColor(kBlack);
 hDatadEdX->SetLineStyle(0);
-hDatadEdX->SetLineWidth(3);
+hDatadEdX->SetLineWidth(1);
 hDatadEdX->SetMarkerStyle(8);
-hDatadEdX->SetMarkerSize(0.9);
+hDatadEdX->SetMarkerSize(0.7);
 
 
 // ### Drawing the histograms ###
@@ -504,9 +503,9 @@ hMCdEdX->SetLineWidth(3);
 
 hDatadEdX->SetLineColor(kGray+2);
 hDatadEdX->SetLineStyle(0);
-hDatadEdX->SetLineWidth(3);
+hDatadEdX->SetLineWidth(1);
 hDatadEdX->SetMarkerStyle(8);
-hDatadEdX->SetMarkerSize(0.9);
+hDatadEdX->SetMarkerSize(0.7);
 hDatadEdX->SetMarkerColor(kGray+2);
 
 
@@ -682,9 +681,9 @@ hMCdEdX->SetLineWidth(3);
 
 hDatadEdX->SetLineColor(kGray+2);
 hDatadEdX->SetLineStyle(0);
-hDatadEdX->SetLineWidth(3);
+hDatadEdX->SetLineWidth(1);
 hDatadEdX->SetMarkerStyle(8);
-hDatadEdX->SetMarkerSize(0.9);
+hDatadEdX->SetMarkerSize(0.7);
 hDatadEdX->SetMarkerColor(kGray+2);
 
 
@@ -859,9 +858,9 @@ hMCdEdX->SetLineWidth(3);
 
 hDatadEdX->SetLineColor(kGray+2);
 hDatadEdX->SetLineStyle(0);
-hDatadEdX->SetLineWidth(3);
+hDatadEdX->SetLineWidth(1);
 hDatadEdX->SetMarkerStyle(8);
-hDatadEdX->SetMarkerSize(0.9);
+hDatadEdX->SetMarkerSize(0.7);
 hDatadEdX->SetMarkerColor(kGray+2);
 
 
@@ -943,7 +942,7 @@ hDatadQdX->GetYaxis()->SetTitle("Events / 0.25 ADC/cm");
 hDatadQdX->GetYaxis()->CenterTitle(); 
 
 // ### Getting the MC dQ/dX plot ###
-TH1F *hMCdQdX = (TH1F*)f2->Get("hRecoMCdQdX");
+TH1F *hMCdQdX = (TH1F*)f2->Get("hMCRecodQdX");
 
 // ### Labeling the axis ###
 hMCdQdX->GetXaxis()->SetTitle("dQ/dX (ADC / cm)");
@@ -1066,9 +1065,9 @@ hMCdQdX->SetLineWidth(3);
 
 hDatadQdX->SetLineColor(kBlack);
 hDatadQdX->SetLineStyle(0);
-hDatadQdX->SetLineWidth(3);
+hDatadQdX->SetLineWidth(1);
 hDatadQdX->SetMarkerStyle(8);
-hDatadQdX->SetMarkerSize(0.9);
+hDatadQdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hDatadQdX->Draw("E1");
@@ -1248,9 +1247,9 @@ hMCdQdX->SetLineWidth(3);
 
 hDatadQdX->SetLineColor(kBlack);
 hDatadQdX->SetLineStyle(0);
-hDatadQdX->SetLineWidth(3);
+hDatadQdX->SetLineWidth(1);
 hDatadQdX->SetMarkerStyle(8);
-hDatadQdX->SetMarkerSize(0.9);
+hDatadQdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hDatadQdX->Draw("E1");
@@ -1428,9 +1427,9 @@ hMCdQdX->SetLineWidth(3);
 
 hDatadQdX->SetLineColor(kBlack);
 hDatadQdX->SetLineStyle(0);
-hDatadQdX->SetLineWidth(3);
+hDatadQdX->SetLineWidth(1);
 hDatadQdX->SetMarkerStyle(8);
-hDatadQdX->SetMarkerSize(0.9);
+hDatadQdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hDatadQdX->Draw("E1");
@@ -1608,9 +1607,9 @@ hMCdQdX->SetLineWidth(3);
 
 hDatadQdX->SetLineColor(kBlack);
 hDatadQdX->SetLineStyle(0);
-hDatadQdX->SetLineWidth(3);
+hDatadQdX->SetLineWidth(1);
 hDatadQdX->SetMarkerStyle(8);
-hDatadQdX->SetMarkerSize(0.9);
+hDatadQdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hDatadQdX->Draw("E1");
@@ -1787,9 +1786,9 @@ hMCdQdX->SetLineWidth(3);
 
 hDatadQdX->SetLineColor(kBlack);
 hDatadQdX->SetLineStyle(0);
-hDatadQdX->SetLineWidth(3);
+hDatadQdX->SetLineWidth(1);
 hDatadQdX->SetMarkerStyle(8);
-hDatadQdX->SetMarkerSize(0.9);
+hDatadQdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hDatadQdX->Draw("E1");
