@@ -310,7 +310,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    // #######################################################################
    // ### Skipping Events which do not go nearly top to bottom in the TPC ###
    // #######################################################################
-   if(DeltaY < 35){continue;}
+   if(abs(DeltaY) < 35){continue;}
    
    nTopToBottomTrkEvents++;
    
