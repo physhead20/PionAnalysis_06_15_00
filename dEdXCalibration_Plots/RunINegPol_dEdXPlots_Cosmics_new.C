@@ -13,8 +13,8 @@ TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrec
 // ### Load Cosmic Monte Carlo Plots ###
 // #####################################
 //TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root");
-TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaledEdX.root");
-
+//TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaledEdX.root");
+TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaleAndSmeardEdX.root");
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -48,13 +48,15 @@ hDatadEdX->SetMarkerSize(0.8);
 // == fit parameters (3 for gaussian 3 for landau) ==
 // ==================================================
 Double_t par_03[6];
-TF1 *data_dqdx_landau = new TF1("data_dedx_landau","landau",0, 50);
-TF1 *data_dqdx_gaus = new TF1("data_dedx_gaus","gaus",0, 50);
-TF1 *combined_data_dedx   = new TF1("combined_data_dedx","landau(0)+gaus(3)",0,50);
+TF1 *data_dqdx_landau     = new TF1("data_dedx_landau","landau+gaus",0, 50);
+TF1 *data_dqdx_gaus       = new TF1("data_dedx_gaus","gaus",0, 50);
+TF1 *combined_data_dedx   = new TF1("combined_data_dedx","landau+gaus(0)+gaus(3)",0,50);
 
 
 // ### Fitting the data dE/dX with Landau as a seed ###
-hDatadEdX->Fit(data_dedx_landau,"R+0i","0", 1.0, 10.0);
+data_dedx_landau->SetParLimits(0,0,900000);
+data_dedx_landau->SetParLimits(1,0,900000);
+hDatadEdX->Fit(data_dedx_landau,"R+0i","0", 0.0, 20.0);
 
 // ### Get the seed parameters for the Landau+Gaus fit ###
 data_dedx_landau->GetParameters(&par_03[0]); //<---Getting parameters from fit 0,1,2
@@ -241,12 +243,12 @@ combined_mc_dedx->SetParameters(par_02);
 //combined_data_dedx->SetParLimits(1,1.8,1.94);
 //combined_mc_dedx->SetParLimits(0,0,900000);
 //combined_mc_dedx->SetParLimits(2,0,900000);
-//combined_mc_dedx->SetParLimits(3,500,900000);
-//combined_mc_dedx->SetParLimits(4,0,50);
+combined_mc_dedx->SetParLimits(3,par_03[3] - 50, par_03[3] + 50);
+//combined_mc_dedx->SetParLimits(4,par_03[4] - 0.5 , par_03[4] + 0.5);
+combined_mc_dedx->SetParLimits(5, par_03[5] - 0.2 , par_03[5] + 0.2);
 //combined_mc_dedx->FixParameter(3,par_03[3]);
-//combined_mc_dedx->FixParameter(4,par_03[4]);
+combined_mc_dedx->FixParameter(4,par_03[4]);
 //combined_mc_dedx->FixParameter(5,par_03[5]);
-//combined_mc_dedx->SetParLimits(4,1.6,1.9);
 
 combined_mc_dedx->SetParName(0,"Landau: Norm");
 combined_mc_dedx->SetParName(1,"Landau: MPV");

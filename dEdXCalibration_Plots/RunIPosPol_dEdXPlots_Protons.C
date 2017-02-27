@@ -10,9 +10,9 @@
 TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunIPosPolData_histos_noCorrections_ProtonXSectionSample.root");
 
 // #####################################
-// ### Load Cosmic Monte Carlo Plots ###
+// ### Load Proton Monte Carlo Plots ###
 // #####################################
-//TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root");
+TFile *f2 = new TFile("../histoROOTfiles_forPlots/StoppingProtonMC_RunI_OutOfTheBox.root");
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -117,8 +117,8 @@ data_dqdx_gaus->SetParameters(&par_03[3]);
 
 
 TH1D *landau_histo1 = new TH1D("landau_histo1","landau_histo1",1000,0,50);
-data_dqdx_gaus->SetRange(0,50);
-landau_histo1 = (TH1D*)data_dqdx_gaus->GetHistogram();
+data_dqdx_landau->SetRange(0,50);
+landau_histo1 = (TH1D*)data_dqdx_landau->GetHistogram();
 landau_histo1->SetFillColor(kRed);
 landau_histo1->SetFillStyle(3001);
 landau_histo1->SetLineWidth(2);
@@ -127,8 +127,8 @@ landau_histo1->SetMarkerColor(kRed);
 landau_histo1->Draw("Csame");
 
 TH1D *gaus_histo1 = new TH1D("gaus_histo1","gaus_histo1",1000,0,50);
-data_dqdx_landau->SetRange(0,50);
-gaus_histo1 = (TH1D*)data_dqdx_landau->GetHistogram();
+data_dqdx_gaus->SetRange(0,50);
+gaus_histo1 = (TH1D*)data_dqdx_gaus->GetHistogram();
 gaus_histo1->SetFillColor(kBlue);
 gaus_histo1->SetFillStyle(3002);
 gaus_histo1->SetLineWidth(2);
@@ -169,7 +169,7 @@ leg->AddEntry(gaus_histo1,"Gaussian");
 leg->AddEntry(landau_histo1,"Landau");
 leg->Draw();
 
-/*
+
 
 
 
@@ -180,7 +180,7 @@ leg->Draw();
 
 
 // ### Getting the data dE/dX plot ###
-TH1F *hMCdEdX = (TH1F*)f2->Get("hMCRecodEdX");
+TH1F *hMCdEdX = (TH1F*)f2->Get("hStoppedProtondEdX");
 
 // ### Labeling the axis ###
 hMCdEdX->GetXaxis()->SetTitle("dE/dX (MeV / cm)");
@@ -227,7 +227,7 @@ mc_dqdx_landau->GetParameters(&par_02[0]); //<---Getting parameters from fit 0,1
 
 
 // ### Fitting the data dE/dX with Gaussian as a seed ###
-hMCdEdX->Fit(mc_dqdx_gaus,"R+0iLL","0", 10.0, 25.0);
+hMCdEdX->Fit(mc_dqdx_gaus,"R+0iLL","0", 0.0, 25.0);
 
 
 // ### Get the seed parameters for the Landau+Gaus fit ###
@@ -238,8 +238,9 @@ mc_dqdx_gaus->GetParameters(&par_02[3]); //<---Getting parameters from fit 0,1,2
 // ===============================================
 combined_mc_dedx->SetParameters(par_02);
 //combined_data_dedx->SetParLimits(1,1.8,1.94);
-combined_mc_dedx->SetParLimits(3,par_03[3],900000);
-combined_mc_dedx->SetParameter(4,par_03[4]);
+//combined_mc_dedx->SetParLimits(3,par_03[3],900000);
+//combined_mc_dedx->SetParameter(4,par_03[4]);
+combined_mc_dedx->SetParLimits(4,0,900000);
 combined_mc_dedx->SetParLimits(5,0,900000);
 
 combined_mc_dedx->SetParName(0,"Landau: Norm");
@@ -285,8 +286,8 @@ mc_dqdx_gaus->SetParameters(&par_02[3]);
 
 
 TH1D *landau_histo2 = new TH1D("landau_histo2","landau_histo2",1000,0,50);
-mc_dqdx_gaus->SetRange(0,50);
-landau_histo2 = (TH1D*)mc_dqdx_gaus->GetHistogram();
+mc_dqdx_landau->SetRange(0,50);
+landau_histo2 = (TH1D*)mc_dqdx_landau->GetHistogram();
 landau_histo2->SetFillColor(kRed);
 landau_histo2->SetFillStyle(3001);
 landau_histo2->SetLineWidth(2);
@@ -295,8 +296,8 @@ landau_histo2->SetMarkerColor(kRed);
 landau_histo2->Draw("Csame");
 
 TH1D *gaus_histo2 = new TH1D("gaus_histo2","gaus_histo2",1000,0,50);
-mc_dqdx_landau->SetRange(0,50);
-gaus_histo2 = (TH1D*)mc_dqdx_landau->GetHistogram();
+mc_dqdx_gaus->SetRange(0,50);
+gaus_histo2 = (TH1D*)mc_dqdx_gaus->GetHistogram();
 gaus_histo2->SetFillColor(kBlue);
 gaus_histo2->SetFillStyle(3002);
 gaus_histo2->SetLineWidth(2);
@@ -337,5 +338,5 @@ leg->AddEntry(gaus_histo1,"Gaussian");
 leg->AddEntry(landau_histo1,"Landau");
 leg->Draw();
 
-*/
+
 }

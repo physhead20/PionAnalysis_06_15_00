@@ -5,6 +5,7 @@
 #include <TCanvas.h>
 #include <iostream>
 #include <TVector3.h>
+#include <TRandom3.h>
 // #######################################################################################
 // ### This is the macro for data analysis of a cosmic sample based on the latest cuts ###
 // ###      using Run I Negative Polarity in LArIATsoft version 06_15_00               ###
@@ -187,6 +188,15 @@ TH2D *hMCRecoYZTrackPoints = new TH2D("hMCRecoYZTrackPoints", "Track Y-Z Points"
 
 
 
+/////////////////////////////////// Random Number  //////////////////////////////////////////
+TH1D *hRandomNumber = new TH1D("hRandomNumber", "Random distribution", 200, -10 , 10);
+
+/////////////////////////////////// Random Number Used  //////////////////////////////////////////
+TH1D *hRandomNumberUsed = new TH1D("hRandomNumberUsed", "Random distribution", 200, -10 , 10);
+
+/////////////////////////////////// "Cosmic Track" dE/dX smeared /////////////////////////////////////////////////////
+TH1D *hMCRecodEdXSmearOnly = new TH1D("hMCRecodEdXSmearOnly", "Cosmic Track dE/dX Smeared Peak", 200, 0, 50);
+
 // ===================================================================================================================
 // ====================================       END HISTOGRAMS AREA           ==========================================
 // ===================================================================================================================
@@ -224,6 +234,42 @@ bool FixCaloIssue_ExtremeFluctuation = false;
 bool FixCaloIssue_LessExtremeFluctuation = false;
 
 
+
+// #####################################
+// ### Scale the dE/dX to match data ###
+// ### True = apply scale factor     ###
+// ### False = don't apply scaling   ###
+// #####################################
+bool RunIScaledEdX = true;
+
+float RunIScaleFactor     = 1.155;
+float RunIdQdXScaleFactor = 0.579038796;
+
+bool RunIIScaledEdX = false;
+
+float RunIIScaleFactor     = 1.0;
+float RunIIdQdXScaleFactor = 1.0;
+
+
+// ##############################################
+// ### Choose whether or not to smear out the ###
+// ###      dE/dX function by a Gaussian      ###
+// ###                                        ###
+// ### True = Smear by Gaussian               ###
+// ### False = Don't smear by Gaussian        ###
+// ##############################################
+bool SmeardEdX = true;
+
+float MeanOfGaussian = 0.0;
+float RMSOfGaussian  = 0.20;
+
+
+float lowerRegionOfPeak = 1.5;
+
+float upperRegionOfPeak = 3.0;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CosmicMC::Loop()
 {
 if (fChain == 0) return;
@@ -234,7 +280,9 @@ Long64_t nbytes = 0, nb = 0;
 // ##########################################################
 // ###			Name your ROOT file		  ###
 // ##########################################################
-TFile myfile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root","RECREATE"); 
+//TFile myfile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root","RECREATE"); 
+//TFile myfile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaledEdX.root","RECREATE");
+TFile myfile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaleAndSmeardEdX.root","RECREATE");
 
 // ##########################################################
 // ### Putting in some counters for event reduction table ###
@@ -265,6 +313,17 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    // === Outputting every nEvents to the screen ===
    if(nTotalEvents % 500 == 0){std::cout<<"Event = "<<nTotalEvents<<std::endl;}
    
+   
+   // ##############################################################################
+   // ### Setting up a random gaussian variable to spread the dE/dX distribution ###
+   // ##############################################################################
+   TRandom3 *rand1 = new TRandom3();
+   rand1->SetSeed(jentry);
+   
+   // === rand->Gaus(mean, RMS) ===
+   double RandSpread = rand1->Gaus(MeanOfGaussian, RMSOfGaussian);
+   
+   hRandomNumber->Fill(RandSpread);
 
    //=======================================================================================================================
    //						Wire Chamber Track Cuts
@@ -308,7 +367,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    // #######################################################################
    // ### Skipping Events which do not go nearly top to bottom in the TPC ###
    // #######################################################################
-   if(DeltaY < 35){continue;}
+   if(abs(DeltaY) < 35){continue;}
    
    nTopToBottomTrkEvents++;
    
@@ -321,6 +380,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    float DataSptsX[1000];
    float DataSptsY[1000];
    float DataSptsZ[1000];
+   
+   float tempdEdX;
    
    // ###############################################################
    // ### Looping over the calorimetry spacepoints for this track ###
@@ -336,6 +397,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       DatadEdX[nDataSpts]     = trkdedx[0][1][nspts];
       DatadQdX[nDataSpts]     = trkdqdx[0][1][nspts];
       
+      tempdEdX                = trkdedx[0][1][nspts];
+      
       // ### Putting in a fix in the case that the dE/dX is negative in this step ###
       // ###  then take the point before and the point after and average them
       if(DatadEdX[nDataSpts] < 0 && nspts < ntrkhits[0] && nspts > 0)
@@ -344,7 +407,43 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // ### If this didn't fix it, then just put in a flat 2.4 MeV / cm fix ###
       if(DatadEdX[nDataSpts] < 0)
          {continue;}
-	    
+      
+      	 
+      // ##############################################################################
+      // #### Applying scale factor to get agreement between data and MC for Run I ####
+      // ##############################################################################
+      if(RunIScaledEdX)
+         {
+	 DatadEdX[nDataSpts]     = tempdEdX * RunIScaleFactor;	 
+	 DatadQdX[nDataSpts]     = trkdqdx[0][1][nspts];
+	 }
+      // ###############################################################################
+      // #### Applying scale factor to get agreement between data and MC for Run II ####
+      // ###############################################################################
+      if(RunIIScaledEdX)
+         {
+	 DatadEdX[nDataSpts]     = trkdedx[0][1][nspts]*(RunIIScaleFactor);
+	 DatadQdX[nDataSpts]     = trkdqdx[0][1][nspts]*(RunIIdQdXScaleFactor);
+	 
+	 }
+      
+      
+      // ########################################################################
+      // ### Apply the spread in the MPV according to the random distribution ###
+      // ########################################################################
+      if(SmeardEdX && DatadEdX[nDataSpts] > lowerRegionOfPeak && DatadEdX[nDataSpts] < upperRegionOfPeak)
+         {
+	 
+	 hRandomNumberUsed->Fill(RandSpread);
+	 float NewdEdX = DatadEdX[nDataSpts] + DatadEdX[nDataSpts]*RandSpread;
+	 
+	 hMCRecodEdXSmearOnly->Fill(NewdEdX);
+	 DatadEdX[nDataSpts] = NewdEdX;
+	 
+	 
+	 
+	 }
+          
       DataResRange[nDataSpts] = trkrr[0][1][nspts];
       DataSptPitch[nDataSpts] = trkpitchhit[0][1][nspts];
 	 
@@ -722,5 +821,9 @@ hMCRecodEdXFixed->Write();
 hMCRecoMatchTrackXPoints->Write();
 hMCRecoMatchTrackYPoints->Write();
 hMCRecoMatchTrackZPoints->Write();
+
+hRandomNumber->Write();
+hRandomNumberUsed->Write();
+hMCRecodEdXSmearOnly->Write();
 
 }

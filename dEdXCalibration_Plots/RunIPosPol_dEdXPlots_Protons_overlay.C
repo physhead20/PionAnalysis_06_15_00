@@ -7,21 +7,19 @@
 // #######################
 // ### Load Data Plots ###
 // #######################
-TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_CosmicTrackSample.root");
+TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunIPosPolData_histos_noCorrections_ProtonXSectionSample.root");
 
 // #####################################
-// ### Load Cosmic Monte Carlo Plots ###
+// ### Load Proton Monte Carlo Plots ###
 // #####################################
-//TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root");
-//TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaledEdX.root");
-TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaleAndSmeardEdX.root");
-
+//TFile *f2 = new TFile("../histoROOTfiles_forPlots/StoppingProtonMC_RunI_scaleddEdX.root");
+TFile *f2 = new TFile("../histoROOTfiles_forPlots/StoppingProtonMC_RunI_scaledANDSmeareddEdX.root");
 //--------------------------------------------------------------------------------------------------------------
 //						dE/dX Plots
 //--------------------------------------------------------------------------------------------------------------
 
 // ### Getting the data dE/dX plot ###
-TH1F *hDatadEdX = (TH1F*)f1->Get("hdatadEdX");
+TH1F *hDatadEdX = (TH1F*)f1->Get("hStoppedProtondEdX");
 
 // ### Labeling the axis ###
 hDatadEdX->GetXaxis()->SetTitle("dE/dX (MeV / cm)");
@@ -31,7 +29,7 @@ hDatadEdX->GetYaxis()->SetTitle("Events / 0.25 MeV/cm");
 hDatadEdX->GetYaxis()->CenterTitle(); 
 
 // ### Getting the MC dE/dX plot ###
-TH1F *hMCdEdX = (TH1F*)f2->Get("hMCRecodEdX");
+TH1F *hMCdEdX = (TH1F*)f2->Get("hStoppedProtondEdX");
 
 // ### Labeling the axis ###
 hMCdEdX->GetXaxis()->SetTitle("dE/dX (MeV / cm)");
@@ -148,7 +146,7 @@ c01->SetTicks();
 c01->SetFillColor(kWhite);
 
 
-hMCdEdX->SetLineColor(kBlue);
+hMCdEdX->SetLineColor(kRed);
 hMCdEdX->SetLineStyle(0);
 hMCdEdX->SetLineWidth(3);
 
@@ -160,8 +158,8 @@ hDatadEdX->SetMarkerSize(0.7);
 
 // ### Drawing the histograms ###
 hMCdEdX->Draw("histo");
-dataFit_histo->Draw("Csames");
-MCFit_histo->Draw("Csames");
+//dataFit_histo->Draw("Csames");
+//MCFit_histo->Draw("Csames");
 hDatadEdX->Draw("E1same");
 
 
@@ -185,14 +183,14 @@ leg->SetFillColor(kWhite);
 leg->SetLineColor(kWhite);
 leg->SetShadowColor(kWhite);
 leg->SetHeader("LArIAT Run-I");
-leg->AddEntry(hDatadEdX,"Data");
-leg->AddEntry(hMCdEdX,"Cosmic MC"); 
-leg->AddEntry(dataFit_histo,"Data Fit: MPV = 1.95 #sigma 0.44");
-leg->AddEntry(MCFit_histo," MC  Fit: MPV = 1.70 #sigma 0.24");
+leg->AddEntry(hDatadEdX,"Proton Data");
+leg->AddEntry(hMCdEdX,"Proton MC"); 
+//leg->AddEntry(dataFit_histo,"Data Fit: MPV = 1.95 #sigma 0.44");
+//leg->AddEntry(MCFit_histo," MC  Fit: MPV = 1.70 #sigma 0.24");
 leg->Draw();
 
 
-
+/*
 //--------------------------------------------------------------------------------------------------------------
 //						dE/dX Plots Quadrant 1
 //--------------------------------------------------------------------------------------------------------------
@@ -1824,6 +1822,6 @@ leg->AddEntry(hMCdQdX,"Cosmic MC");
 leg->AddEntry(dataFit_histo,"Data Fit: MPV = 2756 #sigma 478");
 leg->AddEntry(MCFit_histo," MC  Fit: MPV = 4543 #sigma 653");
 leg->Draw();
-
+*/
 
 }
