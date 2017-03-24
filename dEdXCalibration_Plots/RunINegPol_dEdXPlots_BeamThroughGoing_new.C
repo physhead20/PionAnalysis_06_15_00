@@ -7,14 +7,12 @@
 // #######################
 // ### Load Data Plots ###
 // #######################
-TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_CosmicTrackSample.root");
+TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_ThroughGoingNotMatched.root");
 
-// #####################################
-// ### Load Cosmic Monte Carlo Plots ###
-// #####################################
-//TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_noCorrections.root");
-//TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaledEdX.root");
-TFile *f2 = new TFile("../histoROOTfiles_forPlots/CosmicMC_histos_ScaleAndSmeardEdX.root");
+// #################################################
+// ### Load Beam Through-Going Monte Carlo Plots ###
+// #################################################
+TFile *f2 = new TFile("../histoROOTfiles_forPlots/PionMC_RunI_OutOfTheBox_ThroughGoing.root");
 
 
 
@@ -267,7 +265,7 @@ leg->Draw();
 
 
 // ### Getting the data dE/dX plot ###
-TH1F *hMCdEdX = (TH1F*)f2->Get("hMCRecodEdX");
+TH1F *hMCdEdX = (TH1F*)f2->Get("hRecoMCdEdX");
 
 // ### Labeling the axis ###
 hMCdEdX->GetXaxis()->SetTitle("dE/dX (MeV / cm)");
