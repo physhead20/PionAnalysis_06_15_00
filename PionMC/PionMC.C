@@ -327,8 +327,8 @@ bool UseEventWeight = true;
 bool ScaleByPz = true;
 
 // === Only one of these should be set to true ===
-bool RunIScale = true;
-bool RunIIScale = false;
+bool RunIScale = false;
+bool RunIIScale = true;
 bool CombinedScale = false;
 
 
@@ -384,6 +384,13 @@ bool FixCaloIssue_LessExtremeFluctuation = false;
 // ### False = Don't remove stopping tagged tracks        ###
 // ##########################################################
 bool RemoveStopping = false;
+
+// ###############################################
+// ###  Only keeping through going reco Tracks ###
+// ###  True = Only keep through going tracks  ###
+// ###   False = Keep all types of tracks      ###
+// ###############################################
+bool SelectThroughGoing = false;
    
 
 
@@ -405,7 +412,7 @@ bool VERBOSE = false;
 //TFile myfile("PionMC_NewMatch_wScalings_dEdXScale_Reordering_FixExtremeAndSmallFluctuation.root","RECREATE");
 //TFile myfile("PionMC_NewMatch_wRunIIScalings_dEdXScale_Reordering_FixExtremeAndSmallFluctuation_RemoveStopping.root","RECREATE");
 
-TFile myfile("../histoROOTfiles_forPlots/PionMC_RunI_OutOfTheBox.root","RECREATE");
+TFile myfile("../histoROOTfiles_forPlots/PionMC_RunII_OutOfTheBox_ThroughGoingSample.root","RECREATE");
 
     
 
@@ -1889,6 +1896,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
          trkendy[nTPCtrk] < -19 || trkendz[nTPCtrk] > 89.0)
          {ThroughGoingTrack[nTPCtrk] = true;}
       
+      // ####################################################### 
+      // ### Adding an option to select through-going tracks ###
+      // #######################################################
+      if( (trkvtxz[nTPCtrk] > 5.0 || trkendz[nTPCtrk] < 88.0) && SelectThroughGoing){continue;}
       
       // ###############################################################
       // ### Looping over the calorimetry spacepoints for this track ###

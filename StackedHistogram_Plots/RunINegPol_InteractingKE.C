@@ -159,7 +159,7 @@ double PhotonMCIntegralTrkIncKE= hPhotonMCIncKE->Integral();
 double MCIntegralTrkLength = PionMCIntegralIncKE + MuonMCIntegralIncKE + ElectronMCIntegralIncKE + KaonMCIntegralTrkIncKE + PhotonMCIntegralTrkIncKE;
 double DataIntegralTrkLength = hDataInKE->Integral();
 
-double scaleMCIncKE = DataIntegralTrkLength/MCIntegralTrkLength;
+double scaleMCIncKE = DataIntegralTrkLength/MCIntegralTrkLength * 0.75;
 
 
 
