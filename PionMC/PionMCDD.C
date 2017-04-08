@@ -1,5 +1,5 @@
-#define PionMC_cxx
-#include "PionMC.h"
+#define PionMCDD_cxx
+#include "PionMCDD.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -222,7 +222,7 @@ TH1D *hRecoMCInteractingKEunweighted = new TH1D("hRecoMCInteractingKEunweighted"
 /////////////////////////////////// Cross-Section ////////////////////////////////////////////////////////////////////////////
 TH1F *fCrossSection = new TH1F("fCrossSection", "Cross-Section", 40, 0, 2000);
 
-void PionMC::Loop()
+void PionMCDD::Loop()
 {
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
@@ -322,12 +322,12 @@ float EventWeight = 1.0;
 // ### True  = Use the momentum based weighting  ###
 // ### False = Don't weight events               ###
 // #################################################
-bool UseEventWeight = true;
+bool UseEventWeight = false;
 
-bool ScaleByPz = true;
+bool ScaleByPz = false;
 
 // === Only one of these should be set to true ===
-bool RunIScale = true;
+bool RunIScale = false;
 bool RunIIScale = false;
 bool CombinedScale = false;
 
@@ -355,7 +355,7 @@ float RunIIdQdXScaleFactor = 1.0;
 // ### True  = Use the fix                            ###
 // ### False = Don't use the fix                      ###
 // ######################################################
-bool FixCaloIssue_Reordering = true; 
+bool FixCaloIssue_Reordering = false; 
 
 
 // ######################################################
@@ -390,7 +390,7 @@ bool RemoveStopping = false;
 // ###  True = Only keep through going tracks  ###
 // ###   False = Keep all types of tracks      ###
 // ###############################################
-bool SelectThroughGoing = true;
+bool SelectThroughGoing = false;
    
 
 
@@ -404,15 +404,8 @@ bool VERBOSE = false;
 // ###############################################
 // ### Creating a file to output my histograms ###
 // ###############################################
-//TFile myfile("PionMC_NewMatch_noCorrections_noScalings.root","RECREATE");
-//TFile myfile("PionMC_NewMatch_noCorrections_wScalings.root","RECREATE");
-//TFile myfile("PionMC_NewMatch_wScalings_dEdXScale.root","RECREATE");
-//TFile myfile("PionMC_NewMatch_wScalings_dEdXScale_Reordering.root","RECREATE");
-//TFile myfile("PionMC_NewMatch_wScalings_dEdXScale_Reordering_FixExtremeFluctuation.root","RECREATE");
-//TFile myfile("PionMC_NewMatch_wScalings_dEdXScale_Reordering_FixExtremeAndSmallFluctuation.root","RECREATE");
-//TFile myfile("PionMC_NewMatch_wRunIIScalings_dEdXScale_Reordering_FixExtremeAndSmallFluctuation_RemoveStopping.root","RECREATE");
 
-TFile myfile("../histoROOTfiles_forPlots/PionMC_RunII_OutOfTheBox_ThroughGoingSample.root","RECREATE");
+TFile myfile("../histoROOTfiles_forPlots/PionMCDD_RunI_OutOfTheBox.root","RECREATE");
 
     
 
@@ -421,7 +414,7 @@ TFile myfile("../histoROOTfiles_forPlots/PionMC_RunII_OutOfTheBox_ThroughGoingSa
 // ----------------------------------------------------------------
 
 // ### The assumed energy loss between the cryostat and the TPC ###
-float entryTPCEnergyLoss = 80.; //MeV
+float entryTPCEnergyLoss = 40.; //MeV
 
 // ### The assumed mass of the incident particle (here we assume a pion) ###
 float mass = 139.57;

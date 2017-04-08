@@ -65,7 +65,7 @@ TH1D *hdataInitialKEMomentum = new TH1D("hdataInitialKEMomentum", "Pion Initial 
 TH1D *hdataInitialKEMomentumUnWeighted = new TH1D("hdataInitialKEMomentumUnWeighted", "Pion Initial Momentum (MeV)", 500, 0, 2500);
 
 /////////////////////////////////// "Matched Track" dE/dX /////////////////////////////////////////////////////
-TH1D *hdatadEdX = new TH1D("hdatadEdX", "Matched Track dE/dX", 200, 0, 50);
+TH1D *hdatadEdX = new TH1D("hdatadEdX", "Matched Track dE/dX", 500, 0, 50);
 
 /////////////////////////////////// "Matched Track" dQ/dX /////////////////////////////////////////////////////
 TH1D *hdatadQdX = new TH1D("hdatadQdX", "Matched Track dQ/dX", 2000, 0, 20000);
@@ -918,6 +918,9 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // ### Adding an option to select through-going tracks ###
       // #######################################################
       if( (trkvtxz[nTPCtrk] > 5.0 || trkendz[nTPCtrk] < 88.0) && SelectThroughGoing){continue;}
+      
+      
+      float average_dEdX = 0;
       
       
       // ###############################################################

@@ -14,14 +14,29 @@ TH1D *hMCELossUpstream = new TH1D("hMCELossUpstream", "Energy loss prior to ente
 /////////////////////////////////// Energy Loss in the TPC  ///////////////////////
 TH1D *hMCELossInTPC = new TH1D("hMCELossInTPC", "Energy loss inside the TPC", 110, -100, 1000);
 
+/////////////////////////////////// Energy Loss in the TPC (Reco-info)  ///////////////////////
+TH1D *hMCELossRecoInTPC = new TH1D("hMCELossRecoInTPC", "Reconstructed Energy loss inside the TPC", 110, -100, 1000);
+
+/////////////////////////////////// Delta Energy Loss in the TPC (Reco-true)  ///////////////////////
+TH1D *hDeltaELoss = new TH1D("hDeltaELoss", "E_{Loss in TPC}^{Reco} - E_{Loss in TPC}^{True}", 100, -100, 100);
+
 /////////////////////////////////// Initial Kinetic Energy /////////////////////////
 TH1D *hInitialKE = new TH1D("hInitialKE", "Initial Kinetic Energy", 110, -100, 1000);
 
 /////////////////////////////////// Initial Kinetic Energy @ the TPC /////////////////////////
 TH1D *hInitialKEAtTPC = new TH1D("hInitialKEAtTPC", "Initial Kinetic Energy at the TPC", 110, -100, 1000);
 
+/////////////////////////////////// Initial Kinetic Energy @ the TPC using flat correction /////////////////////////
+TH1D *hInitialKEAtTPCFlat = new TH1D("hInitialKEAtTPCFlat", "Initial Kinetic Energy at the TPC using flat correction", 110, -100, 1000);
+
 /////////////////////////////////// Final Kinetic Energy in the TPC /////////////////////////
 TH1D *hFinalKEInTPC = new TH1D("hFinalKEInTPC", "Final Kinetic Energy in the TPC", 110, -100, 1000);
+
+/////////////////////////////////// Final Kinetic Energy in the TPC from Reconstruction /////////////////////////
+TH1D *hFinalKEInTPCReco = new TH1D("hFinalKEInTPCReco", "Final Kinetic Energy in the TPC using Reco", 110, -100, 1000);
+
+/////////////////////////////////// Final Kinetic Energy in the TPC from Reconstruction and flat correction /////////////////////////
+TH1D *hFinalKEInTPCRecoFlat = new TH1D("hFinalKEInTPCRecoFlat", "Final Kinetic Energy in the TPC using Reco and flat correction", 110, -100, 1000);
 
 /////////////////////////////////// E Loss upstream of the TPC /////////////////////////
 TH2D *hELossXvsY = new TH2D("hELossXvsY", "Energy Loss X vs Y", 100, 0, 50, 100, -25, 25);
@@ -32,17 +47,14 @@ TH2D *hELossXvsYFlux = new TH2D("hELossXvsYFlux", "Energy Loss X vs Y", 100, 0, 
 /////////////////////////////////// Divided E Loss /////////////////////////
 TH2D *hELossXvsYDivide = new TH2D("hELossXvsYDivide", "Energy Loss X vs Y", 100, 0, 50, 100, -25, 25);
 
-
 ////////////////////////////////// MC Theta  //////////////////////////////
 TH1D *hMCTheta = new TH1D("hMCTheta", "Theta", 360, -180, 180);
 
 ////////////////////////////////// MC Phi  //////////////////////////////
 TH1D *hMCPhi = new TH1D("hMCPhi", "Phi", 360, 0, 360);
 
-
 /////////////////////////////////// Phi vs ELoss /////////////////////////
 TH2D *hPhivsELoss = new TH2D("hPhivsELoss", "Phi vs Energy Loss", 360, 0, 360, 400, 0, 400);
-
 
 /////////////////////////////////// Phi vs Theta ELoss /////////////////////////
 TH2D *hPhivsThetaELoss = new TH2D("hPhivsThetaELoss", "Phi vs Energy Loss", 360, 0, 360, 360, -180, 180);
@@ -53,39 +65,20 @@ TH2D *hPhivsThetaELossFlux = new TH2D("hPhivsThetaELossFlux", "Phi vs Energy Los
 /////////////////////////////////// Phi vs Theta ELoss Divided /////////////////////////
 TH2D *hPhivsThetaELossDivided = new TH2D("hPhivsThetaELossDivided", "Phi vs Energy Loss", 360, 0, 360, 360, -180, 180);
 
+/////////////////////////////////// Primary End X vs Z Position //////////////////////////////////////////////
+TH2D *hMCPrimaryEndXvsZ = new TH2D("hMCPrimaryEndXvsZ", "X_{f} vs Z_{f}", 600, -150, 450, 400, -200, 200);
+
+/////////////////////////////////// Primary End Y vs Z Position //////////////////////////////////////////////
+TH2D *hMCPrimaryEndYvsZ = new TH2D("hMCPrimaryEndYvsZ", "Y_{f} vs Z_{f}", 600, -150, 450, 200, -200, 200);
+
 
 void ProtonEnergyLoss::Loop()
 {
 
-//   In a ROOT session, you can do:
-//      Root > .L ProtonEnergyCorrections.C
-//      Root > ProtonEnergyCorrections t
-//      Root > t.GetEntry(12); // Fill t data members with entry number 12
-//      Root > t.Show();       // Show values of entry 12
-//      Root > t.Show(16);     // Read and show values of entry 16
-//      Root > t.Loop();       // Loop on all entries
-//
-
-//     This is the loop skeleton where:
-//    jentry is the global entry number in the chain
-//    ientry is the entry number in the current Tree
-//  Note that the argument to GetEntry must be:
-//    jentry for TChain::GetEntry
-//    ientry for TTree::GetEntry and TBranch::GetEntry
-//
-//       To read only selected branches, Insert statements like:
-// METHOD1:
-//    fChain->SetBranchStatus("*",0);  // disable all branches
-//    fChain->SetBranchStatus("branchname",1);  // activate branchname
-// METHOD2: replace line
-//    fChain->GetEntry(jentry);       //read all branches
-//by  b_branchname->GetEntry(ientry); //read only this branch
 // ##########################################################
 // ### Putting in some counters for event reduction table ###
 // ##########################################################
 int nTotalEvents = 0, nEventsReachTPC = 0, nParticlesStop = 0;
-
-
 
 bool EventsReachTPC = false;
 bool EventsWhereParticleStops = false;
@@ -95,9 +88,18 @@ float particle_mass = 938.28 ;
 // #################################
 // ### Variables for Energy Loss ###
 // #################################
-
 float EnergyLossOutsideTPC = 0;
 float EnergyLossInsideTPC = 0;
+
+
+float RecoEnergyLossInsideTPC = 0;
+
+
+
+// ###########################################
+// ### Create a file for all my histograms ###
+// ###########################################
+TFile myfile("../histoROOTfiles_forPlots/ProtonMC_EnergyCalibrationPlots.root","RECREATE");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,12 +113,13 @@ Long64_t nbytes = 0, nb = 0;
 // ### Looping over events ###
 // ###########################
 for (Long64_t jentry=0; jentry<nentries;jentry++) 
-//for (Long64_t jentry=0; jentry<8000;jentry++)
+//for (Long64_t jentry=0; jentry< 50000;jentry++)
    {
    Long64_t ientry = LoadTree(jentry);
    if (ientry < 0) break;
    nb = fChain->GetEntry(jentry);   nbytes += nb;
-   // if (Cut(ientry) < 0) continue;
+   
+   RecoEnergyLossInsideTPC = 0;
    
    // #############################
    // ### Counting Total Events ###
@@ -156,6 +159,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       
       
       float FinalKEInTPC = 0;
+      float FinalKEInTPCReco = 0;
+      float FinalKEInTPCRecoDumbCorr = 0;
       
       // #########################################################
       // ### Skipping any particle which doesn't enter the TPC ###
@@ -175,12 +180,58 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       
       float g4Primary_ProjX0 = 0.0;
       float g4Primary_ProjY0 = 0.0;
-      float g4Primary_ProjZ0 = 0.0;      
+      float g4Primary_ProjZ0 = 0.0; 
+      
+      
+      float MCRecodEdX[1000]  = {0.}; 
+      int nMCRecoSpts = 0;   
       // #############################################
       // ### Loop over all the primary true points ###
       // #############################################
       if(process_primary[iG4] == 1 && NumberDaughters[iG4] == 0)
          {
+	
+	 
+	 // ##########################################
+   	 // ### Loop over all reconstructed tracks ###
+   	 // ##########################################
+   	 for(int nTPCtrk = 0; nTPCtrk < ntracks_reco; nTPCtrk++)
+      	    {
+	    
+	    // ###############################################################
+      	    // ### Looping over the calorimetry spacepoints for this track ###
+            // ###############################################################
+            for(int nspts = 0; nspts < ntrkhits[nTPCtrk]; nspts++)
+               {
+	       
+	       
+	       MCRecodEdX[nMCRecoSpts]     = trkdedx[nTPCtrk][1][nspts];
+	       // ### Putting in a fix in the case that the dE/dX is negative in this step ### 
+	       // ###  then take the point before and the point after and average them
+	       if(MCRecodEdX[nMCRecoSpts] < 0 && nspts < ntrkhits[nTPCtrk] && nspts > 0)
+	          {MCRecodEdX[nMCRecoSpts] = ( (trkdedx[nTPCtrk][1][nspts - 1] + trkdedx[nTPCtrk][1][nspts + 1]) / 2);}
+	 
+	       // ### If this didn't fix it, then just put in a flat 2.4 MeV / cm fix ###
+	       if(MCRecodEdX[nMCRecoSpts] < 0)
+	          {continue;}
+	       
+	       RecoEnergyLossInsideTPC+= MCRecodEdX[nMCRecoSpts] * trkpitchhit[nTPCtrk][1][nspts];
+	       //std::cout<<"dE/dX = "<<MCRecodEdX[nMCRecoSpts]<<", Pitch = "<<trkpitchhit[nTPCtrk][1][nspts]<<std::endl;
+	       
+	       nMCRecoSpts++;
+	       }//<---end nspts
+
+	    
+	    }// end nTPCtrk loop
+	 
+	 
+	 // ### Filling the energy loss inside the TPC from reconstruction ###
+	 hMCELossRecoInTPC->Fill(RecoEnergyLossInsideTPC);
+	 
+	 
+	 // ### Plotting the end point of the particles ###
+	 hMCPrimaryEndXvsZ->Fill(EndPointz[iG4], EndPointx[iG4]);
+	 hMCPrimaryEndYvsZ->Fill(EndPointz[iG4], EndPointy[iG4]);
 	 
 	 // ############################################
 	 // ### Calculate the initial Kinetic Energy ###
@@ -271,19 +322,30 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	 hMCELossUpstream->Fill(EnergyLossOutsideTPC);
 	 hMCELossInTPC->Fill(EnergyLossInsideTPC);
 	 
+	 float DeltaELoss = RecoEnergyLossInsideTPC - EnergyLossInsideTPC;
+	 hDeltaELoss->Fill(DeltaELoss);
+	 
 	 // ###############################################################
 	 // ### Calculating the initial KE at the front face of the TPC ###
 	 // ###############################################################
 	 float InitialKEAtTPC = InitialKE - EnergyLossOutsideTPC;
+	 float InitialKEAtTPCDumbWay = InitialKE - 65;
 	 
 	 hInitialKEAtTPC->Fill(InitialKEAtTPC);
+	 hInitialKEAtTPCFlat->Fill(InitialKEAtTPCDumbWay);
 	 
 	 // ###############################################
 	 // ### Calculating the Final KE inside the TPC ###
 	 // ###############################################
 	 FinalKEInTPC = InitialKE - EnergyLossOutsideTPC - EnergyLossInsideTPC;
-	 hFinalKEInTPC->Fill(FinalKEInTPC);
 	 
+	 FinalKEInTPCReco = InitialKE - EnergyLossOutsideTPC - RecoEnergyLossInsideTPC;
+	 
+	 FinalKEInTPCRecoDumbCorr = InitialKEAtTPCDumbWay - RecoEnergyLossInsideTPC;
+	 
+	 hFinalKEInTPC->Fill(FinalKEInTPC);
+	 hFinalKEInTPCReco->Fill(FinalKEInTPCReco);
+	 hFinalKEInTPCRecoFlat->Fill(FinalKEInTPCRecoDumbCorr);
 	 
 	 // ------------------------------------------------------------------------------------
 	 // ---------------        Extrapolate the X, Y, Z position of the primary         -----
@@ -384,596 +446,35 @@ std::cout<<"Particle stops inside the TPC			"<<nParticlesStop<<std::endl;
 std::cout<<"========================================================================================"<<std::endl;
 
 
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c01= new TCanvas("c01","Energy Loss Upstream");
-c01->SetTicks();
-c01->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-// ### Formatting the histograms ###
-hMCELossUpstream->SetLineColor(kBlue);
-hMCELossUpstream->SetLineStyle(0);
-hMCELossUpstream->SetLineWidth(3);
-hMCELossUpstream->SetMarkerStyle(8);
-hMCELossUpstream->SetMarkerSize(0.9);
-
-// ### Labeling the axis ###
-hMCELossUpstream->GetXaxis()->SetTitle("Energy Loss Prior to Entering the TPC (MeV)");
-hMCELossUpstream->GetXaxis()->CenterTitle();
-
-hMCELossUpstream->GetYaxis()->SetTitle("Events / MeV");
-hMCELossUpstream->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hMCELossUpstream->Draw();
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-TLegend *leg = new TLegend();
-leg = new TLegend(0.58,0.65,0.88,0.88);
-leg->SetTextSize(0.04);
-leg->SetTextAlign(12);
-leg->SetFillColor(kWhite);
-leg->SetLineColor(kWhite);
-leg->SetShadowColor(kWhite);
-leg->SetHeader("Proton MC");
-leg->Draw();
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c02= new TCanvas("c02","Energy Loss Inside TPC");
-c02->SetTicks();
-c02->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-// ### Formatting the histograms ###
-hMCELossInTPC->SetLineColor(kBlue);
-hMCELossInTPC->SetLineStyle(0);
-hMCELossInTPC->SetLineWidth(3);
-hMCELossInTPC->SetMarkerStyle(8);
-hMCELossInTPC->SetMarkerSize(0.9);
-
-// ### Labeling the axis ###
-hMCELossInTPC->GetXaxis()->SetTitle("Energy Loss inside the TPC (MeV)");
-hMCELossInTPC->GetXaxis()->CenterTitle();
-
-hMCELossInTPC->GetYaxis()->SetTitle("Events / MeV");
-hMCELossInTPC->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hMCELossInTPC->Draw();
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-leg = new TLegend(0.58,0.65,0.88,0.88);
-leg->SetTextSize(0.04);
-leg->SetTextAlign(12);
-leg->SetFillColor(kWhite);
-leg->SetLineColor(kWhite);
-leg->SetShadowColor(kWhite);
-leg->SetHeader("Proton MC");
-leg->Draw();
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c03= new TCanvas("c03","Initial KE");
-c03->SetTicks();
-c03->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-// ### Formatting the histograms ###
-hInitialKE->SetLineColor(kBlue);
-hInitialKE->SetLineStyle(0);
-hInitialKE->SetLineWidth(3);
-hInitialKE->SetMarkerStyle(8);
-hInitialKE->SetMarkerSize(0.9);
-
-// ### Labeling the axis ###
-hInitialKE->GetXaxis()->SetTitle("K.E._{inital} (MeV)");
-hInitialKE->GetXaxis()->CenterTitle();
-
-hInitialKE->GetYaxis()->SetTitle("Events / 10 MeV");
-hInitialKE->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hInitialKE->Draw();
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-leg = new TLegend(0.58,0.65,0.88,0.88);
-leg->SetTextSize(0.04);
-leg->SetTextAlign(12);
-leg->SetFillColor(kWhite);
-leg->SetLineColor(kWhite);
-leg->SetShadowColor(kWhite);
-leg->SetHeader("Proton MC");
-leg->Draw();
-
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c04= new TCanvas("c04","Initial KE at TPC");
-c04->SetTicks();
-c04->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-hInitialKEAtTPC->SetLineColor(kBlue);
-hInitialKEAtTPC->SetLineStyle(0);
-hInitialKEAtTPC->SetLineWidth(3);
-hInitialKEAtTPC->SetMarkerStyle(8);
-hInitialKEAtTPC->SetMarkerSize(0.9);
-
-// ### Labeling the axis ###
-hInitialKEAtTPC->GetXaxis()->SetTitle("K.E._{inital} @ TPC (MeV)");
-hInitialKEAtTPC->GetXaxis()->CenterTitle();
-
-hInitialKEAtTPC->GetYaxis()->SetTitle("Events / 10 MeV");
-hInitialKEAtTPC->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hInitialKEAtTPC->Draw();
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-leg = new TLegend(0.58,0.65,0.88,0.88);
-leg->SetTextSize(0.04);
-leg->SetTextAlign(12);
-leg->SetFillColor(kWhite);
-leg->SetLineColor(kWhite);
-leg->SetShadowColor(kWhite);
-leg->SetHeader("Proton MC");
-leg->Draw();
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c05= new TCanvas("c05","Final KE in TPC");
-c05->SetTicks();
-c05->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-hFinalKEInTPC->SetLineColor(kBlue);
-hFinalKEInTPC->SetLineStyle(0);
-hFinalKEInTPC->SetLineWidth(3);
-hFinalKEInTPC->SetMarkerStyle(8);
-hFinalKEInTPC->SetMarkerSize(0.9);
-
-// ### Labeling the axis ###
-hFinalKEInTPC->GetXaxis()->SetTitle("K.E._{Final} (MeV)");
-hFinalKEInTPC->GetXaxis()->CenterTitle();
-
-hFinalKEInTPC->GetYaxis()->SetTitle("Events / 10 MeV");
-hFinalKEInTPC->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hFinalKEInTPC->Draw();
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-leg = new TLegend(0.58,0.65,0.88,0.88);
-leg->SetTextSize(0.04);
-leg->SetTextAlign(12);
-leg->SetFillColor(kWhite);
-leg->SetLineColor(kWhite);
-leg->SetShadowColor(kWhite);
-leg->SetHeader("Proton MC");
-leg->Draw();
-
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c06= new TCanvas("c06","Energy Loss vs X and Y");
-c06->SetTicks();
-c06->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-
-// ### Labeling the axis ###
-hELossXvsY->GetXaxis()->SetTitle("X Postion at TPC Face (cm)");
-hELossXvsY->GetXaxis()->CenterTitle();
-
-hELossXvsY->GetYaxis()->SetTitle("Y Position at TPC Face (cm)");
-hELossXvsY->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hELossXvsY->Draw("colz");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c07= new TCanvas("c07","Energy Loss vs X and Y Flux");
-c07->SetTicks();
-c07->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-
-// ### Labeling the axis ###
-hELossXvsYFlux->GetXaxis()->SetTitle("X Postion at TPC Face (cm)");
-hELossXvsYFlux->GetXaxis()->CenterTitle();
-
-hELossXvsYFlux->GetYaxis()->SetTitle("Y Position at TPC Face (cm)");
-hELossXvsYFlux->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hELossXvsYFlux->Draw("colz");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c08= new TCanvas("c08","Energy Loss vs X and Y Flux");
-c08->SetTicks();
-c08->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-
+// ##########################
+// ### Dividing the plots ###
+// ##########################
 hELossXvsYDivide->Divide(hELossXvsY, hELossXvsYFlux);
-
-// ### Labeling the axis ###
-hELossXvsYDivide->GetXaxis()->SetTitle("X Postion at TPC Face (cm)");
-hELossXvsYDivide->GetXaxis()->CenterTitle();
-
-hELossXvsYDivide->GetYaxis()->SetTitle("Y Position at TPC Face (cm)");
-hELossXvsYDivide->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hELossXvsYDivide->Draw("colz");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c09= new TCanvas("c09","MC Theta");
-c09->SetTicks();
-c09->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-hMCTheta->SetLineColor(kBlue);
-hMCTheta->SetLineStyle(0);
-hMCTheta->SetLineWidth(3);
-hMCTheta->SetMarkerStyle(8);
-hMCTheta->SetMarkerSize(0.9);
-
-
-// ### Labeling the axis ###
-hMCTheta->GetXaxis()->SetTitle("#theta (Degrees)");
-hMCTheta->GetXaxis()->CenterTitle();
-
-hMCTheta->GetYaxis()->SetTitle("Events / Degree");
-hMCTheta->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hMCTheta->Draw("");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c10= new TCanvas("c10","MC Phi");
-c10->SetTicks();
-c10->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-hMCPhi->SetLineColor(kBlue);
-hMCPhi->SetLineStyle(0);
-hMCPhi->SetLineWidth(3);
-hMCPhi->SetMarkerStyle(8);
-hMCPhi->SetMarkerSize(0.9);
-
-
-// ### Labeling the axis ###
-hMCPhi->GetXaxis()->SetTitle("#phi (Degrees)");
-hMCPhi->GetXaxis()->CenterTitle();
-
-hMCPhi->GetYaxis()->SetTitle("Events / Degree");
-hMCPhi->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hMCPhi->Draw("");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
-
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c11= new TCanvas("c11","ELoss vs Phi");
-c11->SetTicks();
-c11->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
-
-
-// ### Labeling the axis ###
-hPhivsELoss->GetXaxis()->SetTitle("#phi (Degrees)");
-hPhivsELoss->GetXaxis()->CenterTitle();
-
-hPhivsELoss->GetYaxis()->SetTitle("Energy Loss (MeV)");
-hPhivsELoss->GetYaxis()->CenterTitle();
-
-// ### Drawing the histogram ### 
-hPhivsELoss->Draw("colz");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
-
-//----------------------------------------------------------------------------------------------
-
-// ########################
-// ### Making a TCanvas ###
-// ########################
-TCanvas *c12= new TCanvas("c12","ELoss vs Phi");
-c12->SetTicks();
-c12->SetFillColor(kWhite);
-
-// ### Formatting the histograms ###
 hPhivsThetaELossDivided->Divide(hPhivsThetaELoss, hPhivsThetaELossFlux);
 
-// ### Labeling the axis ###
-hPhivsThetaELossDivided->GetXaxis()->SetTitle("#phi (Degrees)");
-hPhivsThetaELossDivided->GetXaxis()->CenterTitle();
 
-hPhivsThetaELossDivided->GetYaxis()->SetTitle("#theta (Degrees)");
-hPhivsThetaELossDivided->GetYaxis()->CenterTitle();
 
-// ### Drawing the histogram ### 
-hPhivsThetaELossDivided->Draw("colz");
-
-// ############################
-// # Setting the Latex Header #
-// ############################
-//TLatex *t = new TLatex();
-t->SetNDC();
-t->SetTextFont(62);
-t->SetTextSize(0.04);
-t->SetTextAlign(40);
-t->DrawLatex(0.1,0.90,"LArIAT Preliminary");
-t->DrawLatex(0.13,0.84,""); 
-
-// ######################
-// # Setting the Legend #
-// ######################
-//TLegend *leg = new TLegend();
-//leg = new TLegend(0.58,0.65,0.88,0.88);
-//leg->SetTextSize(0.04);
-//leg->SetTextAlign(12);
-//leg->SetFillColor(kWhite);
-//leg->SetLineColor(kWhite);
-//leg->SetShadowColor(kWhite);
-//leg->SetHeader("Proton MC");
-//leg->Draw();
+hMCELossUpstream->Write();
+hMCELossInTPC->Write();
+hInitialKE->Write();
+hInitialKEAtTPC->Write();
+hFinalKEInTPC->Write();
+hELossXvsY->Write();
+hELossXvsYFlux->Write();
+hELossXvsYDivide->Write();
+hMCTheta->Write();
+hMCPhi->Write();
+hPhivsELoss->Write();
+hPhivsThetaELoss->Write();
+hPhivsThetaELossFlux->Write();
+hPhivsThetaELossDivided->Write();
+hMCPrimaryEndXvsZ->Write();
+hMCPrimaryEndYvsZ->Write();
+hMCELossRecoInTPC->Write();
+hDeltaELoss->Write();
+hFinalKEInTPCReco->Write();
+hInitialKEAtTPCFlat->Write();
+hFinalKEInTPCRecoFlat->Write();
 
 
 

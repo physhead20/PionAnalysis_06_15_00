@@ -221,6 +221,8 @@ TH1D *hStoppedProtonTrkPitch = new TH1D("hStoppedProtonTrkPitch", "Stopped Proto
 /////////////////////////////////// Initial Kinetic Energy (MeV) /////////////////////////////////////////////
 TH1D *hStoppedProtonRemainingKE = new TH1D("hStoppedProtonRemainingKE", "Proton Remaining Kinetic Energy (MeV)", 500, -1000, 1000);
 
+/////////////////////////////////// Initial Kinetic Energy (MeV) /////////////////////////////////////////////
+TH1D *hStoppedProtonEnergyLossInTPC = new TH1D("hStoppedProtonEnergyLossInTPC", "Proton Energy Loss in TPC (MeV)", 500, -1000, 1000);
 
 // ###############################################################################
 // ### Note: The binning (number and range) needs to match between these plots ###
@@ -388,7 +390,7 @@ bool SelectThroughGoing = false;
 
 
 
-TFile myfile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_ProtonXSectionSample.root","RECREATE");
+TFile myfile("../histoROOTfiles_forPlots/RunIPosPolData_histos_noCorrections_StoppingProtons.root","RECREATE");
 //TFile myfile("../histoROOTfiles_forPlots/RunINegPolData_histos_dEdXScaleFix_PionXSectionSample.root","RECREATE");
 //TFile myfile("../histoROOTfiles_forPlots/RunINegPolData_histos_dEdXScaleFix_ReorderingFix_PionXSectionSample.root","RECREATE");
 //TFile myfile("../histoROOTfiles_forPlots/RunINegPolData_histos_dEdXScaleFix_ReorderingFix_CaloFluctuationFix_PionXSectionSample.root","RECREATE");
@@ -407,7 +409,7 @@ bool VERBOSE = false;
 // ----------------------------------------------------------------
 
 // ### The assumed energy loss between the cryostat and the TPC ###
-float entryTPCEnergyLoss = 40.; //MeV
+float entryTPCEnergyLoss = 0.; //MeV
 
 // ### The assumed mass of the incident particle (here we assume a pion) ###
 float mass = 938.28;
@@ -441,7 +443,7 @@ int MatchWCTrackIndex[10] = {0};
 // ### Looping over all events ###
 // ###############################
 for (Long64_t jentry=0; jentry<nentries;jentry++) 
-//for (Long64_t jentry=0; jentry<20000;jentry++)
+//for (Long64_t jentry=0; jentry<40000;jentry++)
    {
    
    // #########################
@@ -1454,6 +1456,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    //						Filling Incident and Interacting Histograms
    // =========================================================================================================================================
    
+   double EnergyLossInTPC = 0;
+   
    // #########################################
    // ### Loop over the tracks in the event ###
    // #########################################
@@ -1500,6 +1504,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	 // ### Subtracting the energy loss in this step ###
 	 // ################################################
          float energyLossInStep = DatadEdX[npoints] * DataSptPitch[npoints];
+	 
+	 EnergyLossInTPC += DatadEdX[npoints] * DataSptPitch[npoints];
          
 	 // #######################################################
 	 // ### Removing that kinetic energy from the histogram ###
@@ -1513,7 +1519,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       }//<---End nTPCtrk loop
    
    hStoppedProtonRemainingKE->Fill(kineticEnergy);
-   
+   hStoppedProtonEnergyLossInTPC->Fill(EnergyLossInTPC);
    
 
    }//<---End jentry loop
@@ -1667,6 +1673,8 @@ hdataStoppedProtondEdXQ1->Write();
 hdataStoppedProtondEdXQ2->Write();
 hdataStoppedProtondEdXQ3->Write();
 hdataStoppedProtondEdXQ4->Write();
+
+hStoppedProtonEnergyLossInTPC->Write();
 
 
 }//<---End Loop() Function
