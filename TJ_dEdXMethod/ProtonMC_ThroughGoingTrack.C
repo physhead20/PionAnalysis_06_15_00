@@ -1,0 +1,1090 @@
+#define ProtonMC_ThroughGoingTrack_cxx
+#include "ProtonMC_ThroughGoingTrack.h"
+#include <TH2.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <iostream>
+#include <TVector3.h>
+
+// #####################################################################################
+// ### This is the macro for MC analysis of the matched track sample of tracks based ###
+// ###     on the latest cuts using Data Drive MC in LArIATsoft version 06_15_00     ###
+// #####################################################################################
+
+// ===================================================================================================================
+// ====================================       PUT HISTOGRAMS HERE           ==========================================
+// ===================================================================================================================
+
+
+
+/////////////////////////////////// "Matched Track" dE/dX 150 - 200 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_150_200 = new TH1D("hdatadEdX_150_200", "Matched Track dE/dX 150 MeV < P < 200 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 200 - 250 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_200_250 = new TH1D("hdatadEdX_200_250", "Matched Track dE/dX 200 MeV < P < 250 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 250 - 300 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_250_300 = new TH1D("hdatadEdX_250_300", "Matched Track dE/dX 250 MeV < P < 300 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 300 - 350 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_300_350 = new TH1D("hdatadEdX_300_350", "Matched Track dE/dX 300 MeV < P < 350 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 350 - 400 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_350_400 = new TH1D("hdatadEdX_350_400", "Matched Track dE/dX 350 MeV < P < 400 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 400 - 450 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_400_450 = new TH1D("hdatadEdX_400_450", "Matched Track dE/dX 400 MeV < P < 450 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 450 - 500 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_450_500 = new TH1D("hdatadEdX_450_500", "Matched Track dE/dX 450 MeV < P < 500 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 500 - 550 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_500_550 = new TH1D("hdatadEdX_500_550", "Matched Track dE/dX 500 MeV < P < 550 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 550 - 600 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_550_600 = new TH1D("hdatadEdX_550_600", "Matched Track dE/dX 550 MeV < P < 600 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 600 - 650 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_600_650 = new TH1D("hdatadEdX_600_650", "Matched Track dE/dX 600 MeV < P < 650 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 650 - 700 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_650_700 = new TH1D("hdatadEdX_650_700", "Matched Track dE/dX 650 MeV < P < 700 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 700 - 750 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_700_750 = new TH1D("hdatadEdX_700_750", "Matched Track dE/dX 700 MeV < P < 750 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 750 - 800 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_750_800 = new TH1D("hdatadEdX_750_800", "Matched Track dE/dX 750 MeV < P < 800 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 800 - 850 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_800_850 = new TH1D("hdatadEdX_800_850", "Matched Track dE/dX 800 MeV < P < 850 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 850 - 900 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_850_900 = new TH1D("hdatadEdX_850_900", "Matched Track dE/dX 850 MeV < P < 900 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 900 - 950 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_900_950 = new TH1D("hdatadEdX_900_950", "Matched Track dE/dX 900 MeV < P < 950 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 950 - 1000 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_950_1000 = new TH1D("hdatadEdX_950_1000", "Matched Track dE/dX 950 MeV < P < 1000 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 1000 - 1050 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_1000_1050 = new TH1D("hdatadEdX_1000_1050", "Matched Track dE/dX 1000 MeV < P < 1050 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 1050 - 1100 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_1050_1100 = new TH1D("hdatadEdX_1050_1100", "Matched Track dE/dX 1050 MeV < P < 1100 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 1100 - 1150 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_1100_1150 = new TH1D("hdatadEdX_1100_1150", "Matched Track dE/dX 1100 MeV < P < 1150 MeV", 200, 0, 50);
+
+/////////////////////////////////// "Matched Track" dE/dX 1150 - 1200 MeV Momentum /////////////////////////////////////////////////////
+TH1D *hdatadEdX_1150_1200 = new TH1D("hdatadEdX_1150_1200", "Matched Track dE/dX 1150 MeV < P < 1200 MeV", 200, 0, 50);
+
+
+
+// ===================================================================================================================
+// ===================================================================================================================
+
+
+
+void ProtonMC_ThroughGoingTrack::Loop()
+{
+if (fChain == 0) return;
+Long64_t nentries = fChain->GetEntriesFast();
+Long64_t nbytes = 0, nb = 0;
+
+
+// ########################################################
+// ### Delta X Between Wire Chamber Track and TPC Track ###
+// ########################################################
+double DeltaXLowerBound = -4.0;
+double DeltaXUpperBound = 6.0;
+
+// ########################################################
+// ### Delta Y Between Wire Chamber Track and TPC Track ###
+// ########################################################
+double DeltaYLowerBound = -5.0;
+double DeltaYUpperBound = 5.0;
+
+// ############################
+// ### Alpha Cut in degrees ###
+// ############################
+double alphaCut = 10;
+
+
+
+// ########################################################################
+// ### Fiducial Boundry Cuts (used to determine if a track is stopping) ###
+// ########################################################################
+double XLowerFid = 0;
+double XUpperFid = 47;
+
+double YLowerFid = -20;
+double YUpperFid = 20;
+
+double ZLowerFid = 0;
+double ZUpperFid = 90;
+
+// ###                 Note: Format for this variable is:             ###
+// ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
+int plane = 1;
+
+// ########################################################################
+// ### Definition of the upstream part of the TPC where we restrict the ###
+// ###             number of tracks which can be present                ###
+// ########################################################################
+int UpperPartOfTPC = 14.0;
+
+
+// ###############################################
+// ###  Only keeping through going reco Tracks ###
+// ###  True = Only keep through going tracks  ###
+// ###   False = Keep all types of tracks      ###
+// ###############################################
+bool SelectThroughGoing = true;
+
+// ######################################################
+// ### Choose whether or not to fix the calo problems ###
+// ###  associated with ordering of the calo points   ###
+// ###                                                ###
+// ### True  = Use the fix                            ###
+// ### False = Don't use the fix                      ###
+// ######################################################
+bool FixCaloIssue_Reordering = true; 
+
+// ###################################################
+// ### Setting a flag to print out bunch of checks ###
+// ###################################################
+bool VERBOSE = false;  
+
+
+// ### The assumed energy loss between the cryostat and the TPC ###
+float entryTPCEnergyLoss = 40.; //MeV
+
+
+// ##########################################################
+// ### Putting in some counters for event reduction table ###
+// ##########################################################
+int nTotalEvents = 0, nEvtsWCTrack = 0, nEvtsTOF = 0, nEvtsPID = 0, nEvtsTPCTrk = 0;
+int nEvtsWCTrackMatch = 0, nEvtsThroughGoing = 0, nEvtsGoodMC = 0;
+
+
+// #######################################################
+// ### Providing an index for the Matched WC/TPC track ###
+// #######################################################
+int MatchWCTrackIndex[10] = {0};
+
+
+// ====================================================
+// ======  Make histogram file for data sample  ======= 
+TFile myfile("./TJCalibrationMethod_ProtonMC_ThroughGoing_Collection.root","RECREATE");
+
+// ###############################
+// ### Looping over all events ###
+// ###############################
+for (Long64_t jentry=0; jentry<nentries;jentry++) 
+//for (Long64_t jentry=0; jentry<50000;jentry++)
+   {
+   
+   // #########################
+   // ### Loading the event ###
+   // #########################
+   Long64_t ientry = LoadTree(jentry);
+   if (ientry < 0) break;
+   nb = fChain->GetEntry(jentry);   nbytes += nb;
+   
+   // #############################
+   // ### Counting Total Events ###
+   // #############################
+   nTotalEvents++;
+   
+   // === Outputting every nEvents to the screen ===
+   if(nTotalEvents % 500 == 0){std::cout<<"Event = "<<nTotalEvents<<std::endl;}
+   
+   
+   //=======================================================================================================================
+   //				Only looking at events where the primary particle enters the TPC
+   //=======================================================================================================================
+   
+   bool GoodMCEventInTPC = true;
+   int nG4Primary = 0;
+   
+   float g4Primary_Px[100] = {0.}, g4Primary_Py[100] = {0.}, g4Primary_Pz[100] = {0.};
+   float g4Primary_ProjX0[100] = {0.}, g4Primary_ProjY0[100] = {0.}, g4Primary_ProjZ0[100] = {0.};
+   
+   // ##############################################
+   // ### Looping over all the primary particles ###
+   // ##############################################
+   for (int iG4 = 0; iG4 < geant_list_size; iG4++)
+      {
+      // #####################################################
+      // ### If this is a primary particle then look at it ###
+      // #####################################################
+      if(process_primary[iG4] == 1)
+         {
+	 if(EndPointz[iG4] < 0){GoodMCEventInTPC = false;}
+	 
+	 g4Primary_Px[nG4Primary] = Px[iG4] * 1000; //<---Converting to MeV
+	 g4Primary_Py[nG4Primary] = Py[iG4] * 1000; //<---Converting to MeV
+	 g4Primary_Pz[nG4Primary] = Pz[iG4] * 1000; //<---Converting to MeV
+	 
+	 // ------------------------------------------------------------------------------------
+	 // ---------------        Extrapolate the X, Y, Z position of the primary         -----
+	 // ---------------     if it started upstream of the front face of the TPC        -----
+	 // ------------------------------------------------------------------------------------
+	 
+	 double b1 = StartPointz[iG4] - StartPointx[iG4]*Pz[iG4]/Px[iG4];
+	 double b2 = StartPointz[iG4] - StartPointy[iG4]*Pz[iG4]/Py[iG4];
+	 
+	 g4Primary_ProjX0[nG4Primary] = -b1*Px[iG4]/Pz[iG4];
+	 g4Primary_ProjY0[nG4Primary] = -b2*Py[iG4]/Pz[iG4];
+	 g4Primary_ProjZ0[nG4Primary] = 0.0;
+	 
+	 nG4Primary++;
+	 
+	 }//<---End npri
+      }//<---end iG4   
+   if(!GoodMCEventInTPC){continue;}
+   nEvtsGoodMC++;
+   
+   //=======================================================================================================================
+   //						Uniquely matching one WC Track to TPC Track
+   //=======================================================================================================================
+   
+   // ### Keeping track of the number of matched tracks ###
+   int nMatchedTracks = 0;
+   
+   // ### Variables for Delta WC and TPC tracks ###
+   float DeltaX_WC_TPC_Track = 999;
+   float DeltaY_WC_TPC_Track = 999;
+   
+   // ### Setting the index for the track which is ###
+   // ### uniquely matched to a wire chamber track ###
+   bool MatchTPC_WVTrack[500] = {false};
+   
+   MatchWCTrackIndex[0] = 0;
+   MatchWCTrackIndex[1] = 0;
+   MatchWCTrackIndex[2] = 0;
+   MatchWCTrackIndex[3] = 0;
+   MatchWCTrackIndex[4] = 0;
+   MatchWCTrackIndex[5] = 0;
+   MatchWCTrackIndex[6] = 0;
+   MatchWCTrackIndex[7] = 0;
+   MatchWCTrackIndex[8] = 0;
+   
+   
+   float WireChamberTrackMomentum = 0;
+   
+   
+   // ### Loop over the WCTracks and TOF Objects ###
+   //for (int numWCTrk = 0; numWCTrk < nwctrks; numWCTrk++)
+      //{
+      // ####################################
+      // ### Loop over all the TPC Tracks ###
+      // ####################################
+      for(int nTPCtrk = 0; nTPCtrk < ntracks_reco; nTPCtrk++)
+         {
+	 
+	 // === Set a dummy variables for the most upstream point ===
+	 float FirstSpacePointZ = 999;
+	 float FirstSpacePointY = 999;
+         float FirstSpacePointX = 999;
+	 
+	 float TempTrj_X = 999;
+         float TempTrj_Y = 999;
+         float TempTrj_Z = 999;
+	 // ###############################################################
+         // ### Looping over the trajectory points for the prelim-track ###
+         // ###############################################################
+         for(int ntrjpts = 0; ntrjpts < nTrajPoint[nTPCtrk]; ntrjpts++)
+            {
+	    
+	    // ### Recording this tracks upstream most X, Y, Z location, ###
+	    // ###       which is inside the fiducial boundary           ###
+	    if(trjPt_Z[nTPCtrk][ntrjpts] < FirstSpacePointZ && trjPt_Y[nTPCtrk][ntrjpts] > YLowerFid && 
+	       trjPt_Y[nTPCtrk][ntrjpts] < YUpperFid && trjPt_X[nTPCtrk][ntrjpts] > XLowerFid && 
+	       trjPt_X[nTPCtrk][ntrjpts] < XUpperFid && trjPt_Z[nTPCtrk][ntrjpts] < UpperPartOfTPC)
+	       {
+	       
+	       // ######################################
+	       // ### Record the most upstream point ###
+	       // ######################################
+	       FirstSpacePointZ = trjPt_Z[nTPCtrk][ntrjpts];
+	       FirstSpacePointY = trjPt_Y[nTPCtrk][ntrjpts];
+	       FirstSpacePointX = trjPt_X[nTPCtrk][ntrjpts];
+	       
+	       TempTrj_X = pHat0_X[nTPCtrk][ntrjpts];
+	       TempTrj_Y = pHat0_Y[nTPCtrk][ntrjpts];
+	       TempTrj_Z = pHat0_Z[nTPCtrk][ntrjpts];
+	       
+	       
+	       }//<---End finding the most upstream point
+	    }//<---End ntrjpts loop
+	 
+	 // ###################################################
+         // ### Vectors for angles between TPC and WC Track ###
+         // ###################################################
+         TVector3 z_hat(0,0,1);
+         TVector3 p_hat_0;
+      
+         // ### Setting the vector for the matched track ###
+         // ###      most upstream trajectory point      ###
+         p_hat_0.SetX(TempTrj_X);
+         p_hat_0.SetY(TempTrj_Y);
+         p_hat_0.SetZ(TempTrj_Z); //<--Note: since at this point we only have one unique match
+      			          //         only having one entry should be fine
+	 			  
+	 // ===============================================================================================================
+         // 				Calculating Theta and Phi for this TPC Track
+         // ===============================================================================================================
+         // ### Calculating the Theta for the TPC Track ###
+         float tpcTheta = acos(z_hat.Dot(p_hat_0)/p_hat_0.Mag());  
+
+         // ### Using same convention as WCTrack to calculate phi ###
+         float phi = 0;
+         //Calculating phi (degeneracy elimination for the atan function)
+         //----------------------------------------------------------------------------------------------
+         if( p_hat_0.Y() > 0 && p_hat_0.X() > 0 ){ phi = atan(p_hat_0.Y()/p_hat_0.X()); }
+         else if( p_hat_0.Y() > 0 && p_hat_0.X() < 0 ){ phi = atan(p_hat_0.Y()/p_hat_0.X())+3.141592654; }
+         else if( p_hat_0.Y() < 0 && p_hat_0.X() < 0 ){ phi = atan(p_hat_0.Y()/p_hat_0.X())+3.141592654; }
+         else if( p_hat_0.Y() < 0 && p_hat_0.X() > 0 ){ phi = atan(p_hat_0.Y()/p_hat_0.X())+6.28318; }
+         else if( p_hat_0.Y() == 0 && p_hat_0.X() == 0 ){ phi = 0; }//defined by convention
+         else if( p_hat_0.Y() == 0 )
+            {
+            if( p_hat_0.X() > 0 ){ phi = 0; }
+
+            else{ phi = 3.141592654; }
+
+            }
+         else if( p_hat_0.X() == 0 )
+            {
+            if( p_hat_0.Y() > 0 ){ phi = 3.141592654/2; }
+            else{ phi = 3.141592654*3/2; }
+
+            }
+         //----------------------------------------------------------------------------------------------
+   
+         // ### Using TPC Phi ###
+         float tpcPhi = phi; 
+      
+         // ===============================================================================================================            
+         // ===============================================================================================================
+	 
+	 
+	 // ################################################
+         // ### Calculating the angles for the Geant4 MC ###
+         // ################################################
+         TVector3 z_hat_MC(0,0,1);
+         TVector3 p_hat_0_MC;
+   
+         // ### Setting the vector for the MC using the ###
+         // ###  extrapolated Momentum vector   ###
+         p_hat_0_MC.SetX(g4Primary_Px[0]);
+         p_hat_0_MC.SetY(g4Primary_Py[0]);
+         p_hat_0_MC.SetZ(g4Primary_Pz[0]); 
+   
+         // ### Getting everything in the same convention ###
+         float mcPhi = 0;
+         float mcTheta = 0;
+   
+         // === Calculating Theta for MC ===
+         mcTheta = acos(z_hat_MC.Dot(p_hat_0_MC)/p_hat_0_MC.Mag());
+   
+         // === Calculating Phi for MC ===
+         //---------------------------------------------------------------------------------------------------------------------
+         if( p_hat_0_MC.Y() > 0 && p_hat_0_MC.X() > 0 ){ mcPhi = atan(p_hat_0_MC.Y()/p_hat_0_MC.X()); }
+         else if( p_hat_0_MC.Y() > 0 && p_hat_0_MC.X() < 0 ){ mcPhi = atan(p_hat_0_MC.Y()/p_hat_0_MC.X())+3.141592654; }
+         else if( p_hat_0_MC.Y() < 0 && p_hat_0_MC.X() < 0 ){ mcPhi = atan(p_hat_0_MC.Y()/p_hat_0_MC.X())+3.141592654; }
+         else if( p_hat_0_MC.Y() < 0 && p_hat_0_MC.X() > 0 ){ mcPhi = atan(p_hat_0_MC.Y()/p_hat_0_MC.X())+6.28318; }
+         else if( p_hat_0_MC.Y() == 0 && p_hat_0_MC.X() == 0 ){ mcPhi = 0; }//defined by convention
+         else if( p_hat_0_MC.Y() == 0 )
+            {
+            if( p_hat_0_MC.X() > 0 ){ mcPhi = 0; }
+
+            else{ mcPhi = 3.141592654; }
+
+            }
+         else if( p_hat_0_MC.X() == 0 )
+            {
+            if( p_hat_0_MC.Y() > 0 ){ mcPhi = 3.141592654/2; }
+            else{ mcPhi = 3.141592654*3/2; }
+
+            }
+         //---------------------------------------------------------------------------------------------------------------------
+	 
+	 // #######################################################
+	 // ### Defining unit vectors for the WC and TPC tracks ###
+	 // #######################################################
+	 TVector3 theUnitVector_WCTrack;
+         TVector3 theUnitVector_TPCTrack;
+	 
+	 // === WCTrack Unit Vector ===
+         theUnitVector_WCTrack.SetX(sin(mcTheta)*cos(mcPhi));
+         theUnitVector_WCTrack.SetY(sin(mcTheta)*sin(mcPhi));
+         theUnitVector_WCTrack.SetZ(cos(mcTheta));
+    
+         // === TPC Track Unit Vector ===
+         theUnitVector_TPCTrack.SetX(sin(tpcTheta)*cos(tpcPhi));
+         theUnitVector_TPCTrack.SetY(sin(tpcTheta)*sin(tpcPhi));
+         theUnitVector_TPCTrack.SetZ(cos(tpcTheta));
+	 
+	 // ##########################################################################
+	 // ### Calculating the Delta X and Delta Y between WC track and TPC track ###
+	 // ##########################################################################
+	 DeltaX_WC_TPC_Track = FirstSpacePointX - (g4Primary_ProjX0[0]);//<---Note: *0.1 to convert to cm
+	 DeltaY_WC_TPC_Track = FirstSpacePointY - (g4Primary_ProjY0[0]);
+	 
+	 
+	 // ###########################################################
+         // ### Calculating the angle between WCTrack and TPC Track ###
+         // ###########################################################
+         float alpha = ( acos(theUnitVector_WCTrack.Dot(theUnitVector_TPCTrack)) )* (180.0/3.141592654);
+	 
+	 // ###########################################################################
+	 // ### If this TPC track matches this Wire Chamber Track, bump the counter ###
+	 // ###########################################################################
+	 if( DeltaX_WC_TPC_Track >  DeltaXLowerBound && DeltaX_WC_TPC_Track < DeltaXUpperBound && 
+	     DeltaY_WC_TPC_Track > DeltaYLowerBound && DeltaY_WC_TPC_Track < DeltaYUpperBound &&
+	     alpha < alphaCut )
+	    {
+	    // ### Counting the matched tracks ###
+	    nMatchedTracks++;
+	    
+	    // ### Setting the index of this track to true ###
+	    MatchTPC_WVTrack[nTPCtrk] = true;
+	    
+	    
+	    WireChamberTrackMomentum = sqrt( (g4Primary_Px[0]*g4Primary_Px[0]) + (g4Primary_Py[0]*g4Primary_Py[0]) + (g4Primary_Pz[0]*g4Primary_Pz[0])) - entryTPCEnergyLoss;
+	    } 
+	 
+	 
+	 }//<---End nTPCtrk loop
+      
+      
+      //}//<---End loop over numWCTrk
+   
+   // #####################################################
+   // ### Skipping this event if no WC track is matched ###
+   // ###    OR if more than one WC track is matched    ###
+   // #####################################################
+   if( (nMatchedTracks < 1 || nMatchedTracks > 1)){continue;}
+      
+   
+   // ### Counting the number of events with ONE WC track matched ###
+   nEvtsWCTrackMatch++;
+   
+   
+   // =========================================================================================================================================
+   //							 Calorimetry Points
+   // =========================================================================================================================================
+   
+   //Vectors with calo info of the matched tpc track
+   double DatadEdX[20][1000]={0.};
+   double DatadQdX[20][1000]={0.};
+   double DataResRange[20][1000]={0.};
+   double DataSptPitch[20][1000]={0.};
+   int nDataTrks = 0;
+   int nDataSpts = 0;
+   int nSpacePoints[1000] = {0.};
+   
+   float DataSptsX[20][1000];
+   float DataSptsY[20][1000];
+   float DataSptsZ[20][1000];
+   
+   
+   bool AtLeastOneThroughGoingTrack = false;
+   // ################################################
+   // ### Creating a flag for through going tracks ###
+   // ################################################
+   bool ThroughGoingTrack[1000]={false};
+      
+   // ###########################################
+   // ### Creating a flag for stopping tracks ###
+   // ###########################################
+   bool StoppingParticle[1000] = {false};
+   
+   // ############################
+   // ### Loop over all tracks ###
+   // ############################
+   for(int nTPCtrk = 0; nTPCtrk < ntracks_reco; nTPCtrk++)
+      {
+      
+      // ### Skipping all the tracks which ARE NOT well matched ###
+      if(!MatchTPC_WVTrack[nTPCtrk]){continue;}
+
+      // ###################################################
+      // ### Check to see if this track is through going ###
+      // ### by checking to see if it ends on a boundary ###
+      // ###################################################
+      if(trkendx[nTPCtrk] < 1   || trkendx[nTPCtrk] > 42.0 || trkendy[nTPCtrk] > 19 ||
+         trkendy[nTPCtrk] < -19 || trkendz[nTPCtrk] > 89.0)
+         {ThroughGoingTrack[nTPCtrk] = true;}
+             
+      
+      float average_dEdX = 0;
+      
+      // ###############################################################
+      // ### Looping over the calorimetry spacepoints for this track ###
+      // ###############################################################
+      for(int nspts = 0; nspts < ntrkhits[nTPCtrk]; nspts++)
+         {
+	 // ###                 Note: Format for this variable is:             ###
+	 // ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
+         DatadEdX[nDataTrks][nDataSpts]     = trkdedx[nTPCtrk][plane][nspts];
+	 DatadQdX[nDataTrks][nDataSpts]     = trkdqdx[nTPCtrk][plane][nspts];
+	 
+	 // ### Putting in a fix in the case that the dE/dX is negative in this step ### 
+	 // ###  then take the point before and the point after and average them
+	 if(DatadEdX[nDataTrks][nDataSpts] < 0 && nspts < ntrkhits[nTPCtrk] && nspts > 0)
+	    {DatadEdX[nDataTrks][nDataSpts] = ( (trkdedx[nTPCtrk][plane][nspts - 1] + trkdedx[nTPCtrk][plane][nspts + 1]) / 2);}
+	 
+	 // ### If this didn't fix it, then just put in a flat 2.4 MeV / cm fix ###
+	 if(DatadEdX[nDataTrks][nDataSpts] < 0)
+	    {continue;}
+	    
+	 DataResRange[nDataTrks][nDataSpts] = trkrr[nTPCtrk][plane][nspts];
+	 
+	 // ### Put in a flag to look for through going tracks ###
+	 if(trkrr[nTPCtrk][plane][nspts] > 88){AtLeastOneThroughGoingTrack = true;}
+	 
+	 
+         DataSptPitch[nDataTrks][nDataSpts] = trkpitchhit[nTPCtrk][plane][nspts];
+	 
+	 DataSptsX[nDataTrks][nDataSpts] = trkxyz[nTPCtrk][plane][nspts][0];
+	 DataSptsY[nDataTrks][nDataSpts] = trkxyz[nTPCtrk][plane][nspts][1];
+	 DataSptsZ[nDataTrks][nDataSpts] = trkxyz[nTPCtrk][plane][nspts][2];
+
+	 
+	 // ### Bump the nDataSpts counter ###
+	 nDataSpts++;
+
+	 
+	 }//<---End spacepoints loop
+	 
+      nSpacePoints[nDataTrks] = nDataSpts;	 
+      nDataSpts = 0;	 
+      nDataTrks++;
+      
+      }//<---End nTPCtrk loop 
+
+// ############################################################################
+// ### Adding a counter for the number of events with a through going track ###
+// ############################################################################
+if(AtLeastOneThroughGoingTrack){nEvtsThroughGoing++;}
+
+
+   
+// ---------------------------------------------------------------------------------------------------------------------------------------
+   bool HasToBeReordered[20] = {false};
+   int ReorderedCount = 0;
+   int ReorderTrkCount[20] = {0};
+   int bb = 0;
+   // ############################################################
+   // ### Fix the reordering problem of the calorimetry points ###
+   // ############################################################
+   if(FixCaloIssue_Reordering)
+      {
+      
+      for( int trkPoints = 0; trkPoints < nDataTrks; trkPoints++)
+         {
+         // ################################
+         // ### Loop over the caloPoints ###
+         // ################################
+         for(int caloPoints = 0; caloPoints < nSpacePoints[trkPoints]-1; caloPoints++)
+            {
+	    // ###           If this points Residual Range is smaller than the       ###
+	    // ### next point, then things may be out of wack and we want to reorder ###
+	    if(DataResRange[trkPoints][caloPoints] < DataResRange[trkPoints][caloPoints+1])
+	       {
+	       // #######################################################
+	       // ### Set a flag that this might have to be reordered ###
+	       // #######################################################
+	       HasToBeReordered[trkPoints] = true;
+	    
+	       // ### counting the points that are out of order ###
+	       ReorderedCount++;
+	       }
+
+            }//<---End caloPoints
+	 ReorderTrkCount[trkPoints] = ReorderedCount;
+	 ReorderedCount = 0;   
+	 }//<---End trkPoints
+      }//<---End fixing the ordering problem
+   
+   // #####################################################
+   // ### The things need to be reorderd for this track ###
+   // #####################################################
+   
+   for(int trkpt = 0; trkpt < nDataTrks; trkpt++)
+      {
+   
+      if(HasToBeReordered[trkpt] && ( (nSpacePoints[trkpt] -  ReorderTrkCount[trkpt]) == 1))
+         {
+      
+         // ### Temp Variables for fixing ###
+         double tempRR[20][1000] = {0.};
+         double tempdEdX[20][1000] = {0.};
+         double tempdQdX[20][1000] = {0.};
+         double tempPitch[20][1000] = {0.};
+      
+         double tempx[20][1000] = {0.};
+         double tempy[20][1000] = {0.};
+         double tempz[20][1000] = {0.};
+      
+         // ### Start at the last point ###
+         for(int aa = nSpacePoints[trkpt]; aa > -1; aa--)
+            {
+	    // ##########################################
+	    // ### Skip the point if it is at the end ###
+	    // ##########################################
+	    if(DataResRange[aa] == 0){continue;}
+	 
+	    // ### Reorder the points ###
+	    tempRR[trkpt][bb]       = DataResRange[trkpt][aa];
+	    tempdEdX[trkpt][bb]     = DatadEdX[trkpt][aa];
+	    tempdQdX[trkpt][bb]     = DatadQdX[trkpt][aa];
+	    tempPitch[trkpt][bb]    = DataSptPitch[trkpt][aa];
+	 
+	    tempx[trkpt][bb] = DataSptsX[trkpt][aa];
+	    tempy[trkpt][bb] = DataSptsY[trkpt][aa];
+	    tempz[trkpt][bb] = DataSptsZ[trkpt][aa];
+	 
+	    bb++;
+	    }//<---end aa 
+      
+         // ###########################
+         // ### Now swap the points ###
+         // ###########################
+         for(int reorder = 0; reorder < nSpacePoints[trkpt]; reorder++)
+            {
+	    DataResRange[trkpt][reorder] = tempRR[trkpt][reorder];
+	    DatadEdX[trkpt][reorder]     = tempdEdX[trkpt][reorder];
+	    DatadQdX[trkpt][reorder]     = tempdQdX[trkpt][reorder];
+	    DataSptPitch[trkpt][reorder] = tempPitch[trkpt][reorder];
+	 
+	    DataSptsX[trkpt][reorder] = tempx[trkpt][reorder];
+	    DataSptsY[trkpt][reorder] = tempy[trkpt][reorder];
+	    DataSptsZ[trkpt][reorder] = tempz[trkpt][reorder];
+	 
+	    }//<---End reorder loop
+      
+         }//<<----End trkpt loop
+      }//<---End Has to be reordered
+
+   // ##################################
+   // ### Printing things as a check ###
+   // ##################################
+   if(HasToBeReordered && VERBOSE)
+      {
+      for(int trackPoint = 0; trackPoint < nDataTrks; trackPoint++)
+         {
+	 if(!MatchTPC_WVTrack[trackPoint]){continue;}
+	 
+	 std::cout<<"===== Track "<<trackPoint<<"  ========"<<std::endl;
+         for(int caloPoints = 0; caloPoints < nSpacePoints[trackPoint]; caloPoints++)
+            {
+	    std::cout<<"Run = "<<run<<", Event = "<<event<<" point = "<<caloPoints<<", RR = "<<DataResRange[trackPoint][caloPoints]<<", dE/dX = "<<DatadEdX[trackPoint][caloPoints]<<std::endl;
+      
+      
+            }//<---End caloPoints
+      std::cout<<std::endl;
+         }//<---End track  Piont	 
+      }//<---Putting in a print to make sure things are reordered correctly   
+
+   // ####################################
+   // ### Loop over all the TPC Tracks ###
+   // ####################################
+   for(int nTPCtrk = 0; nTPCtrk < nDataTrks; nTPCtrk++)
+      {
+      
+      // ### Skipping all the tracks which ARE NOT well matched ###
+      if(!MatchTPC_WVTrack[nTPCtrk]){continue;}
+      
+      // ### Skipping any track with too few spacepoints ###
+      if(nSpacePoints[nTPCtrk] < 20 && AtLeastOneThroughGoingTrack){continue;}
+      
+      // -----------------------------
+      // --- 150 MeV < P < 200 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 150 && WireChamberTrackMomentum < 200)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_150_200->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 200 MeV < P < 250 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 200 && WireChamberTrackMomentum < 250)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_200_250->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 250 MeV < P < 300 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 250 && WireChamberTrackMomentum < 300)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_250_300->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 300 MeV < P < 350 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 300 && WireChamberTrackMomentum < 350)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_300_350->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 350 MeV < P < 400 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 350 && WireChamberTrackMomentum < 400)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_350_400->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 400 MeV < P < 450 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 400 && WireChamberTrackMomentum < 450)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_400_450->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 450 MeV < P < 500 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 450 && WireChamberTrackMomentum < 500)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_450_500->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+	 
+      // -----------------------------
+      // --- 500 MeV < P < 550 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 500 && WireChamberTrackMomentum < 550)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_500_550->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 550 MeV < P < 600 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 550 && WireChamberTrackMomentum < 600)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_550_600->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      
+      // -----------------------------
+      // --- 600 MeV < P < 650 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 600 && WireChamberTrackMomentum < 650)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_600_650->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+        
+      
+      // -----------------------------
+      // --- 650 MeV < P < 700 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 650 && WireChamberTrackMomentum < 700)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_650_700->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 700 MeV < P < 750 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 700 && WireChamberTrackMomentum < 750)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_700_750->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 750 MeV < P < 800 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 750 && WireChamberTrackMomentum < 800)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_750_800->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      
+      // -----------------------------
+      // --- 800 MeV < P < 850 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 800 && WireChamberTrackMomentum < 850)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_800_850->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 850 MeV < P < 900 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 850 && WireChamberTrackMomentum < 900)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_850_900->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 900 MeV < P < 950 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 900 && WireChamberTrackMomentum < 950)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_900_950->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      
+      // -----------------------------
+      // --- 950 MeV < P < 1000 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 950 && WireChamberTrackMomentum < 1000)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_950_1000->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      // -----------------------------
+      // --- 1000 MeV < P < 1050 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 1000 && WireChamberTrackMomentum < 1050)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_1000_1050->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+	 
+      // -----------------------------
+      // --- 1050 MeV < P < 1100 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 1050 && WireChamberTrackMomentum < 1100)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_1050_1100->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin	 
+      
+      
+      // -----------------------------
+      // --- 1100 MeV < P < 1150 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 1100 && WireChamberTrackMomentum < 1150)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_1100_1150->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+      
+      
+      // -----------------------------
+      // --- 1150 MeV < P < 1200 MeV ---
+      // -----------------------------
+      if(WireChamberTrackMomentum > 1150 && WireChamberTrackMomentum < 1200)
+         {
+	 // ###############################################################
+         // ### Looping over the calorimetry spacepoints for this track ###
+         // ###############################################################
+         for(int nspts = 0; nspts < 12; nspts++)
+            {
+	    hdatadEdX_1150_1200->Fill(DatadEdX[nTPCtrk][nspts]);
+	    
+	    }
+	 
+	 }//<---End Momentum Bin
+
+      }//<---End nTPC trk
+
+
+
+
+
+
+
+
+
+   }//<---end jentry loop
+   
+std::cout<<"Total number of Events              = "<<nTotalEvents<<std::endl;
+std::cout<<"Events w/ MC particle @ TPC         = "<<nEvtsGoodMC<<std::endl;
+std::cout<<"Events w/ TPC Track                 = "<<nEvtsTPCTrk<<std::endl;
+std::cout<<"Events w/ unique match              = "<<nEvtsWCTrackMatch<<std::endl;
+std::cout<<"Events w/ through going track       = "<<nEvtsThroughGoing<<std::endl;
+
+
+
+hdatadEdX_150_200->Write();
+hdatadEdX_200_250->Write();
+hdatadEdX_250_300->Write();
+hdatadEdX_300_350->Write();
+hdatadEdX_350_400->Write();
+hdatadEdX_400_450->Write();
+hdatadEdX_450_500->Write();
+hdatadEdX_500_550->Write();
+hdatadEdX_550_600->Write();
+hdatadEdX_600_650->Write();
+hdatadEdX_650_700->Write();
+hdatadEdX_700_750->Write();
+hdatadEdX_750_800->Write();
+hdatadEdX_800_850->Write();
+hdatadEdX_850_900->Write();
+hdatadEdX_900_950->Write();
+hdatadEdX_950_1000->Write();
+hdatadEdX_1000_1050->Write();
+hdatadEdX_1050_1100->Write();
+hdatadEdX_1100_1150->Write();
+hdatadEdX_1150_1200->Write();   
+   
+}
