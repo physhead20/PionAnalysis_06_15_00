@@ -45,9 +45,11 @@ for(int a = 0; a < 11; a++){binXErrorLessbin[a] = 50.;}
 
 for(int a = 0; a < 21; a++){binXError[a] = 25.;}
 
-//TFile *f1 = new TFile("./TJCalibrationMethod_PionMC_RunI_ThroughGoing_Collection.root");
-TFile *f1 = new TFile("./TJCalibrationMethod_PionMC_RunI_ThroughGoing_Induction.root");
+TFile *f1 = new TFile("./TJCalibrationMethod_PionMC_RunI_ThroughGoing_Collection.root");
+//TFile *f1 = new TFile("./TJCalibrationMethod_PionMC_RunI_ThroughGoing_Induction.root");
 
+
+//TFile *f1 = new TFile("./TJCalibrationMethod_v06_34_01_RunINegPol_ThroughGoing_Collection.root");
 
 //------------------------------------------------------------------------------
 // ### Getting the data dE/dX plot ###
@@ -120,7 +122,7 @@ dEdXError[4]  = data_gaus->GetParError(1);
 TH1F *h400_450 = (TH1F*)f1->Get("hdatadEdX_400_450");
 TF1 *data_gaus = new TF1("data_gaus","gaus",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h400_450->Fit(data_gaus,"R+0LLi","0",1, 2.25);
+h400_450->Fit(data_gaus,"R+0LLi","0",1, 2.75);
 
 dEdX[5]       = data_gaus->GetParameter(1);
 dEdXError[5]  = data_gaus->GetParError(1);

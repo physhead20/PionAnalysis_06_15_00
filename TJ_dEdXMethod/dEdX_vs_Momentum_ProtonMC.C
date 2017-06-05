@@ -61,8 +61,8 @@ for(int a = 0; a < 11; a++){binXErrorLessbin[a] = 50.;}
 for(int a = 0; a < 21; a++){binXError[a] = 25.;}
 
 
-TFile *f1 = new TFile("./TJCalibrationMethod_ProtonMC_ThroughGoing_Collection.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunIPosPol_Proton_Induction.root");
+//TFile *f1 = new TFile("./TJCalibrationMethod_ProtonMC_ThroughGoing_Collection.root");
+TFile *f1 = new TFile("./TJCalibrationMethod_RunIPosPol_Proton_Induction.root");
 
 
 //------------------------------------------------------------------------------
@@ -208,7 +208,7 @@ dEdXErrorLessbin[4] = sqrt( (dEdXError[8]*dEdXError[8])+(dEdXError[9]*dEdXError[
 TH1F *h650_700 = (TH1F*)f1->Get("hdatadEdX_650_700");
 TF1 *data_gaus = new TF1("data_gaus","gaus",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h650_700->Fit(data_gaus,"R+0LLi","0",5, 12.25);
+h650_700->Fit(data_gaus,"R+0LLi","0",4, 6.25);
 
 dEdX[10]       = data_gaus->GetParameter(1);
 dEdXError[10]  = data_gaus->GetParError(1);
@@ -260,7 +260,7 @@ dEdXErrorLessbin[6] = sqrt( (dEdXError[12]*dEdXError[12])+(dEdXError[13]*dEdXErr
 TH1F *h850_900 = (TH1F*)f1->Get("hdatadEdX_850_900");
 TF1 *data_gaus = new TF1("data_gaus","gaus",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h850_900->Fit(data_gaus,"R+0LLi","0",3, 7.25);
+h850_900->Fit(data_gaus,"R+0LLi","0",2.5, 4.25);
 
 dEdX[14]       = data_gaus->GetParameter(1);
 dEdXError[14]  = data_gaus->GetParError(1);
@@ -270,7 +270,7 @@ dEdXError[14]  = data_gaus->GetParError(1);
 TH1F *h900_950 = (TH1F*)f1->Get("hdatadEdX_900_950");
 TF1 *data_gaus = new TF1("data_gaus","gaus",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h900_950->Fit(data_gaus,"R+0LLi","0",3, 7.25);
+h900_950->Fit(data_gaus,"R+0LLi","0",2.5, 4.25);
 
 dEdX[15]       = data_gaus->GetParameter(1);
 dEdXError[15]  = data_gaus->GetParError(1);
@@ -322,7 +322,7 @@ dEdXError[18]  = data_gaus->GetParError(1);
 TH1F *h1100_1150 = (TH1F*)f1->Get("hdatadEdX_1100_1150");
 TF1 *data_gaus = new TF1("data_gaus","gaus",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h1100_1150->Fit(data_gaus,"R+0LLi","0",5, 12.25);
+h1100_1150->Fit(data_gaus,"R+0LLi","0",2.5, 4.25);
 
 dEdX[19]       = data_gaus->GetParameter(1);
 dEdXError[19]  = data_gaus->GetParError(1);
@@ -332,7 +332,7 @@ dEdXError[19]  = data_gaus->GetParError(1);
 TH1F *h1150_1200 = (TH1F*)f1->Get("hdatadEdX_1150_1200");
 TF1 *data_gaus = new TF1("data_gaus","gaus",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h1150_1200->Fit(data_gaus,"R+0LLi","0",5, 12.25);
+h1150_1200->Fit(data_gaus,"R+0LLi","0",2.5, 4.25);
 
 dEdX[20]       = data_gaus->GetParameter(1);
 dEdXError[20]  = data_gaus->GetParError(1);
@@ -422,7 +422,7 @@ leg->SetFillColor(kWhite);
 leg->SetLineColor(kWhite);
 leg->SetShadowColor(kWhite);
 leg->SetHeader("LArIAT Run-I Positive Polarity");
-leg->AddEntry(gr,"Proton Data");
+leg->AddEntry(gr,"Proton MC");
 leg->AddEntry(grMuon,"Muon"); 
 leg->AddEntry(grPion,"Pion");
 leg->AddEntry(grProton,"Proton");
@@ -468,7 +468,7 @@ leg->SetFillColor(kWhite);
 leg->SetLineColor(kWhite);
 leg->SetShadowColor(kWhite);
 leg->SetHeader("LArIAT Run-I Positive Polarity");
-leg->AddEntry(gr,"Proton Data");
+leg->AddEntry(gr,"Proton MC");
 leg->AddEntry(grMuon,"Muon"); 
 leg->AddEntry(grPion,"Pion");
 leg->AddEntry(grProton,"Proton");

@@ -45,11 +45,24 @@ for(int a = 0; a < 11; a++){binXErrorLessbin[a] = 50.;}
 
 for(int a = 0; a < 21; a++){binXError[a] = 25.;}
 
-TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_Collection.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_PionMC_RunI_ThroughGoing_Induction.root");
+
+// ########################
+// ### Collection Plane ###
+// ########################
+
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_DefaultCollection_ThroughGoing.root");
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.052Collection_ThroughGoing.root");
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.058Collection_ThroughGoing.root");
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.055Collection_ThroughGoing.root");
+
+// #######################
+// ### Induction Plane ###
+// #######################
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_DefaultInduction_ThroughGoing.root");
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.0347Induction_ThroughGoing.root");
+TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.0507Induction_ThroughGoing.root");
 
 
-//TFile *f1 = new TFile("./TJCalibrationMethod_v06_34_01_RunINegPol_ThroughGoing_Collection.root");
 
 //------------------------------------------------------------------------------
 // ### Getting the data dE/dX plot ###

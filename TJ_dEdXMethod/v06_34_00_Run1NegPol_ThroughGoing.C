@@ -1,5 +1,5 @@
-#define RunI_NegPol_cxx
-#include "RunI_NegPol.h"
+#define v06_34_00_Run1NegPol_ThroughGoing_cxx
+#include "v06_34_00_Run1NegPol_ThroughGoing.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -10,42 +10,6 @@
 // ### This is the macro for data analysis of the matched track sample of tracks based ###
 // ### on the latest cuts using Run I Negative Polarity in LArIATsoft version 06_15_00 ###
 // #######################################################################################
-
-
-float corrdEdx(float dEdx)
-{
-  
-  // ###########################################
-  // ### Putting in the calorimetry constant ###
-  // ###########################################
-  
-  // *** 06_15_00 Run-1 Data Induction Plane:  0.0247 ***
-  // *** 06_15_00 Run-1 Data Collection Plane: 0.048 ***
-  
-  float caloconstant = 0.0507;
-  
-  
-  float rho    = 1.383;
-  float beta   = 0.3 ;// cm / MeV
-  float betap  = 0.212; //(kV/cm)(g/cm^2)/MeV 
-  float alpha  = 0.93;
-  float Wion   = 23.6 / 1E6;// MeV / e-
-  float Efield = 0.5;
-
-  float dQdx = log(dEdx * betap/(rho*Efield) + alpha) / (betap/(rho*Efield) * Wion);
-  
-  dQdx *= 0.0153/caloconstant;
-
-  //dQdx *= 0.0153/0.0382;
-
-  float newdQdx = (exp(betap/(rho*Efield) * Wion * dQdx) - alpha)/(betap/(rho*Efield));
-  //cout<<newdQdx<<endl;
-
-  return newdQdx;
-}
-
-// ### Possible Collection Plane ###
-// 0.058
 
 // ===================================================================================================================
 // ====================================       PUT HISTOGRAMS HERE           ==========================================
@@ -58,9 +22,6 @@ TH1D *hdataTOFNoCuts = new TH1D("hdataTOFNoCuts", "Time of Flight (No Cuts)", 12
 
 /////////////////////////////////// Wire Chamber Track Momentum vs TOF, no cuts ////////////////////////////////
 TH2D *hdataWCTrackMomentumVSTOF = new TH2D("hdataWCTrackMomentumVSTOF", "TOF vs WCTrack Momentum", 250, 0, 2500, 200, 0, 100);
-
-/////////////////////////////////// "Matched Track" dE/dX 150 - 200 MeV Momentum /////////////////////////////////////////////////////
-TH1D *hdatadEdX = new TH1D("hdatadEdX", "Matched Track dE/dX", 200, 0, 50);
 
 /////////////////////////////////// "Matched Track" dE/dX 150 - 200 MeV Momentum /////////////////////////////////////////////////////
 TH1D *hdatadEdX_150_200 = new TH1D("hdatadEdX_150_200", "Matched Track dE/dX 150 MeV < P < 200 MeV", 200, 0, 50);
@@ -127,7 +88,11 @@ TH1D *hdatadEdX_1150_1200 = new TH1D("hdatadEdX_1150_1200", "Matched Track dE/dX
 
 
 
-void RunI_NegPol::Loop()
+// ===================================================================================================================
+// ===================================================================================================================
+
+
+void v06_34_00_Run1NegPol_ThroughGoing::Loop()
 {
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
@@ -183,7 +148,7 @@ double ZUpperFid = 90;
 
 // ###                 Note: Format for this variable is:             ###
 // ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
-int plane = 0;
+int plane = 1;
 
 
 // ########################################################################
@@ -234,13 +199,13 @@ int MatchWCTrackIndex[10] = {0};
 
 // ====================================================
 // ======  Make histogram file for data sample  ======= 
-TFile myfile("./TJCalibrationMethod_RunINegPol_0.0507Induction_ThroughGoing.root","RECREATE");
+TFile myfile("./TJCalibrationMethod_v06_34_01_RunINegPol_ThroughGoing_Collection.root","RECREATE");
 
 // ###############################
 // ### Looping over all events ###
 // ###############################
 for (Long64_t jentry=0; jentry<nentries;jentry++) 
-//for (Long64_t jentry=0; jentry<100000;jentry++)
+//for (Long64_t jentry=0; jentry<50000;jentry++)
    {
    
    // #########################
@@ -538,48 +503,16 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       // ### by checking to see if it ends on a boundary ###
       // ###################################################
       if(trkendx[nTPCtrk] < 1   || trkendx[nTPCtrk] > 42.0 || trkendy[nTPCtrk] > 19 ||
-         trkendy[nTPCtrk] < -19 || trkendz[nTPCtrk] > 88.0)
+         trkendy[nTPCtrk] < -19 || trkendz[nTPCtrk] > 89.0)
          {ThroughGoingTrack[nTPCtrk] = true;}
              
       
       float average_dEdX = 0;
       
-      if(SelectThroughGoing && !ThroughGoingTrack[nTPCtrk]){continue;}
-      
-      // ### Loop over the hits ###
-      for (int ihit = 0; ihit<nhits; ++ihit)
-         {
-	 // ##################################
-	 // ### Match the track to the hit ###
-	 // ##################################
-	 if (hit_trkkey[ihit]==nTPCtrk)
-	    {
-	    // #################################################
-	    // ### Require the hits to be in the right plane ###
-	    // #################################################
-	    if (hit_plane[ihit] == plane)
-	       {
-	       DatadEdX[nDataTrks][nDataSpts]     = corrdEdx(hit_dEds[ihit]);
-	       DatadQdX[nDataTrks][nDataSpts]     = hit_dQds[ihit];
-	       
-	       DataResRange[nDataTrks][nDataSpts] = hit_resrange[ihit];
-	       DataSptPitch[nDataTrks][nDataSpts] = hit_ds[ihit];
-	       DataSptsX[nDataTrks][nDataSpts] = hit_x[ihit];
-	       DataSptsY[nDataTrks][nDataSpts] = hit_y[ihit];
-	       DataSptsZ[nDataTrks][nDataSpts] = hit_z[ihit];
-	       nDataSpts++;
-	       }//<---end matching hit plane
-	    }//<---end matching hit to track
-	 
-	 }//<---End 
-      
-      
-      
-      
       // ###############################################################
       // ### Looping over the calorimetry spacepoints for this track ###
       // ###############################################################
-      /*for(int nspts = 0; nspts < ntrkhits[nTPCtrk]; nspts++)
+      for(int nspts = 0; nspts < ntrkhits[nTPCtrk]; nspts++)
          {
 	 // ###                 Note: Format for this variable is:             ###
 	 // ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
@@ -613,11 +546,11 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 
 	 
 	 }//<---End spacepoints loop
-      */	 
+	 
       nSpacePoints[nDataTrks] = nDataSpts;	 
       nDataSpts = 0;	 
       nDataTrks++;
-      AtLeastOneThroughGoingTrack = true;
+      
       }//<---End nTPCtrk loop 
 
 // ############################################################################
@@ -755,13 +688,6 @@ if(AtLeastOneThroughGoingTrack){nEvtsThroughGoing++;}
       
       // ### Skipping any track with too few spacepoints ###
       if(nSpacePoints[nTPCtrk] < 20 && AtLeastOneThroughGoingTrack){continue;}
-      
-      
-      for(int nspts = 0; nspts < nSpacePoints[nTPCtrk]; nspts++)
-         {
-         hdatadEdX->Fill(DatadEdX[nTPCtrk][nspts]);
-	 
-	 }
       
       // -----------------------------
       // --- 150 MeV < P < 200 MeV ---
@@ -1128,7 +1054,6 @@ std::cout<<"Events w/ through going track = "<<nEvtsThroughGoing<<std::endl;
 
 hdataTOFNoCuts->Write(); 
 hdataWCTrackMomentumVSTOF->Write(); 
-hdatadEdX->Write();
 
 hdatadEdX_150_200->Write();
 hdatadEdX_200_250->Write();

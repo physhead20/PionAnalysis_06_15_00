@@ -11,6 +11,28 @@ double dEdXError[21] = {0.};
 double binX[21] = {175, 225, 275, 325, 375, 425, 475, 525, 575, 625, 675, 725, 775, 825, 875, 925, 975, 1025, 1075, 1125, 1175};
 double binXError[21] = {0.};
 
+double MuonMomentum[28] = {100.3, 107.4, 114.3, 121, 127.6, 140.3, 152.7, 164.7, 176.4, 199.4, 221.8, 254.6, 286.8, 339.6, 356.7, 
+                       391.7, 443.2, 494.5, 545.5, 596.4, 647.1, 697.7, 798.7, 899.5, 1000, 1101, 1301, 1502};
+		       
+double MuonMomentumError[28] = {0.};
+
+double MuonTheorydEdX[28] = {2.34, 2.21, 2.107, 2.023, 1.954, 1.848, 1.771, 1.713, 1.67, 1.609, 1.57, 1.536, 1.519, 1.508,
+			 1.51, 1.51, 1.517, 1.526, 1.537, 1.548, 1.559, 1.57, 1.591, 1.61, 1.628, 1.645, 1.675, 1.7};
+			 
+double MuonTheorydEdXError[28] = {0.};	
+
+double PionMomentum[28] = {130.39, 139.62, 148.59, 157.3, 165.88, 182.39, 198.51, 214.11, 229.32, 259.22, 288.34, 330.98, 372.84,
+			   441.48, 463.71, 509.21, 576.16, 642.85, 709.15, 775.32, 841.23, 907.01, 1038.31, 1169.35, 1300, 1431.3,
+			   1691.3, 1952.6};
+		       
+double PionMomentumError[28] = {0.};
+
+double PionTheorydEdX[28] = {2.34, 2.21, 2.107, 2.023, 1.954, 1.848, 1.771, 1.713, 1.67, 1.609, 1.57, 1.536, 1.519, 1.508,
+			 1.51, 1.51, 1.517, 1.526, 1.537, 1.548, 1.559, 1.57, 1.591, 1.61, 1.628, 1.645, 1.675, 1.7};
+			 
+double PionTheorydEdXError[28] = {0.};
+	       
+
 for(int a = 0; a < 21; a++){binXError[a] = 25.;}
 
 TFile *f1 = new TFile("./CalibrationMethod.root");
@@ -237,8 +259,14 @@ dEdX[20]       = data_gaus->GetParameter(1);
 dEdXError[20]  = data_gaus->GetParError(1);
 
 const Int_t n = 20;
+const Int_t m = 28;
+const Int_t o = 28;
 
-gr = new TGraphErrors(n,binX,dEdX,binXError,dEdXError);
+gr  = new TGraphErrors(n,binX,dEdX,binXError,dEdXError);
+gr1 = new TGraphErrors(m,MuonMomentum,MuonTheorydEdX,MuonMomentumError,MuonTheorydEdXError);
+gr2 = new TGraphErrors(m,PionMomentum,PionTheorydEdX,PionMomentumError,PionTheorydEdXError);
+
 gr->Draw("AP");
-
+gr1->Draw("Csame");
+gr2->Draw("Csame");
 }//<---End File

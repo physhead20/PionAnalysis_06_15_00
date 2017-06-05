@@ -7,6 +7,7 @@
 // #######################
 // ### Load Data Plots ###
 // #######################
+//TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_PionXSectionSample.root");
 TFile *f1 = new TFile("../histoROOTfiles_forPlots/RunIINegPolData_histos_noCorrections_PionXSectionSample.root");
 
 // #####################################
@@ -72,6 +73,7 @@ double scaleMC = DataIntegral/MCIntegral;
 
 // ### Scaling MC ###
 hMCdEdX->Sumw2();
+//hMCdEdX->Scale(scaleMC*2.1);
 hMCdEdX->Scale(scaleMC*2.5);
 //hMCdEdX->Scale( (1/hMCdEdX->Integral())*1.80);
 
@@ -83,7 +85,8 @@ TCanvas *c01 = new TCanvas("c01", "dEdX");
 c01->SetTicks();
 c01->SetFillColor(kWhite);
 
-hDatadEdX->Draw("E1");
+hMCdEdX->Draw();
+hDatadEdX->Draw("E1same");
 
 hMCdEdX->Draw("histosame");
 
@@ -100,7 +103,7 @@ leg->SetFillColor(kWhite);
 leg->SetLineColor(kWhite);
 leg->SetShadowColor(kWhite);
 leg->SetHeader("LArIAT Run-II");
-leg->AddEntry(hDatadEdX,"Run-I Pion Data");
+leg->AddEntry(hDatadEdX,"Run-II Pion Data");
 leg->AddEntry(hMCdEdX,"Pion MC"); 
 leg->Draw();
 

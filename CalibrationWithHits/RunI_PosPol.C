@@ -1,5 +1,5 @@
-#define RunI_NegPol_cxx
-#include "RunI_NegPol.h"
+#define RunI_PosPol_cxx
+#include "RunI_PosPol.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -22,7 +22,7 @@ float corrdEdx(float dEdx)
   // *** 06_15_00 Run-1 Data Induction Plane:  0.0247 ***
   // *** 06_15_00 Run-1 Data Collection Plane: 0.048 ***
   
-  float caloconstant = 0.0507;
+  float caloconstant = 0.055;
   
   
   float rho    = 1.383;
@@ -127,7 +127,7 @@ TH1D *hdatadEdX_1150_1200 = new TH1D("hdatadEdX_1150_1200", "Matched Track dE/dX
 
 
 
-void RunI_NegPol::Loop()
+void RunI_PosPol::Loop()
 {
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
@@ -162,7 +162,7 @@ double HighWCTrkMomentum  = 2000.0;//<--(MeV)
 //double HighWCTrkMomentum  = 1100.0;//<--(MeV)
 
 double LowerTOF = 10.0; //<--(ns)
-double HighTOF  = 30.0; //<--(ns)
+double HighTOF  = 26.0; //<--(ns)
 
 //double LowerTOF = 28.0; //<--(ns)
 //double HighTOF  = 55.0; //<--(ns)
@@ -183,7 +183,7 @@ double ZUpperFid = 90;
 
 // ###                 Note: Format for this variable is:             ###
 // ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
-int plane = 0;
+int plane = 1;
 
 
 // ########################################################################
@@ -234,7 +234,7 @@ int MatchWCTrackIndex[10] = {0};
 
 // ====================================================
 // ======  Make histogram file for data sample  ======= 
-TFile myfile("./TJCalibrationMethod_RunINegPol_0.0507Induction_ThroughGoing.root","RECREATE");
+TFile myfile("./TJCalibrationMethod_RunIPosPol_0.055Collection_ThroughGoing.root","RECREATE");
 
 // ###############################
 // ### Looping over all events ###
