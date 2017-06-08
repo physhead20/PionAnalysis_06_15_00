@@ -11,6 +11,41 @@
 // #######################################################################################
 
 
+float corrdEdx(float dEdx)
+{
+  
+  // ###########################################
+  // ### Putting in the calorimetry constant ###
+  // ###########################################
+  
+  // *** 06_15_00 Run-1 Data Induction Plane:  0.0247 ***
+  // *** 06_15_00 Run-1 Data Collection Plane: 0.048 ***
+  
+  float caloconstant = 0.055;
+  
+  
+  float rho    = 1.383;
+  float beta   = 0.3 ;// cm / MeV
+  float betap  = 0.212; //(kV/cm)(g/cm^2)/MeV 
+  float alpha  = 0.93;
+  float Wion   = 23.6 / 1E6;// MeV / e-
+  float Efield = 0.5;
+
+  float dQdx = log(dEdx * betap/(rho*Efield) + alpha) / (betap/(rho*Efield) * Wion);
+  
+  dQdx *= 0.0153/caloconstant;
+
+  //dQdx *= 0.0153/0.0382;
+
+  float newdQdx = (exp(betap/(rho*Efield) * Wion * dQdx) - alpha)/(betap/(rho*Efield));
+  //cout<<newdQdx<<endl;
+
+  return newdQdx;
+}
+
+// ### Possible Collection Plane ###
+// 0.058
+
 // ===================================================================================================================
 // ====================================       PUT HISTOGRAMS HERE           ==========================================
 // ===================================================================================================================
@@ -202,28 +237,22 @@ TH2D *hdataYZTrackPoints = new TH2D("hdataYZTrackPoints", "Track Y-Z Points", 20
 // ### True  = Use the fix                            ###
 // ### False = Don't use the fix                      ###
 // ######################################################
-bool FixCaloIssue_Reordering = false; 
+bool FixCaloIssue_Reordering = true; 
 
 
-// ######################################################
-// ### Choose whether or not to fix the calo problems ###
-// ###   associated with large dE/dX fluctuations     ###
-// ###                                                ###
-// ### True  = Use the fix                            ###
-// ### False = Don't use the fix                      ###
-// ######################################################
-bool FixCaloIssue_ExtremeFluctuation = false;     
+// ####################################################
+// ### Choose whether or not to use the 3d distance ###
+// ### between points for the pitch and recalculate ###
+// ###    the dE/dX distribution based on this      ###
+// ###                                              ###
+// ### True = Recalculate                           ###
+// ### False = Use the existing dE/dX               ###
+// ####################################################
+bool Calculate3dPitch = false;
 
-// ########################################################
-// ###   Choose whether or not to fix the calo problems ###
-// ### associated with slightly large dE/dX fluctuations###
-// ###                                                  ###
-// ### True  = Use the fix                              ###
-// ### False = Don't use the fix                        ###
-// ########################################################
-bool FixCaloIssue_LessExtremeFluctuation = false;
-
-
+// ###                 Note: Format for this variable is:             ###
+// ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
+int plane = 1;
 
 
 void CosmicData::Loop()
@@ -236,7 +265,7 @@ Long64_t nbytes = 0, nb = 0;
 // ##########################################################
 // ###			Name your ROOT file		  ###
 // ##########################################################
-TFile myfile("../histoROOTfiles_forPlots/RunINegPolData_histos_noCorrections_CosmicTrackSample.root","RECREATE"); 
+TFile myfile("../histoROOTfiles_forPlots/RunINegPolData_histos_NewCalo_CosmicTrackSample.root","RECREATE"); 
 
 // ##########################################################
 // ### Putting in some counters for event reduction table ###
@@ -314,364 +343,235 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
    
    nTopToBottomTrkEvents++;
    
-   double DatadEdX[1000]={0.};
-   double DatadQdX[1000]={0.};
-   double DataResRange[1000]={0.};
-   double DataSptPitch[1000]={0.};
+   //Vectors with calo info of the matched tpc track
+   double DatadEdX[20][1000]={0.};
+   double DatadQdX[20][1000]={0.};
+   double DataResRange[20][1000]={0.};
+   double DataSptPitch[20][1000]={0.};
+   int nDataTrks = 0;
    int nDataSpts = 0;
+   int nSpacePoints[1000] = {0.};
    
-   float DataSptsX[1000];
-   float DataSptsY[1000];
-   float DataSptsZ[1000];
+   float DataSptsX[20][1000];
+   float DataSptsY[20][1000];
+   float DataSptsZ[20][1000];
    
-   // ###############################################################
-   // ### Looping over the calorimetry spacepoints for this track ###
-   // ###############################################################
-   for(int nspts = 0; nspts < ntrkhits[0]; nspts++)
+   // ############################
+   // ### Loop over all tracks ###
+   // ############################
+   for(int nTPCtrk = 0; nTPCtrk < ntracks_reco; nTPCtrk++)
       {
-      hdataXZTrackPoints->Fill(trkxyz[0][1][nspts][2], trkxyz[0][1][nspts][0]);
-      hdataYZTrackPoints->Fill(trkxyz[0][1][nspts][2], trkxyz[0][1][nspts][1]);
-      
-      
-      // ###                 Note: Format for this variable is:             ###
-      // ### [trk number][plane 0 = induction, 1 = collection][spts number] ###
-      DatadEdX[nDataSpts]     = trkdedx[0][1][nspts];
-      DatadQdX[nDataSpts]     = trkdqdx[0][1][nspts];
-      
-      // ### Putting in a fix in the case that the dE/dX is negative in this step ###
-      // ###  then take the point before and the point after and average them
-      if(DatadEdX[nDataSpts] < 0 && nspts < ntrkhits[0] && nspts > 0)
-      {DatadEdX[nDataSpts] = ( (trkdedx[0][1][nspts - 1] + trkdedx[0][1][nspts + 1]) / 2);}
-      
-      // ### If this didn't fix it, then just put in a flat 2.4 MeV / cm fix ###
-      if(DatadEdX[nDataSpts] < 0)
-         {continue;}
-	    
-      DataResRange[nDataSpts] = trkrr[0][1][nspts];
-      DataSptPitch[nDataSpts] = trkpitchhit[0][1][nspts];
-	 
-      DataSptsX[nDataSpts] = trkxyz[0][1][nspts][0];
-      DataSptsY[nDataSpts] = trkxyz[0][1][nspts][1];
-      DataSptsZ[nDataSpts] = trkxyz[0][1][nspts][2];
-      
-      hdataMatchTrackXPoints->Fill(DataSptsX[nDataSpts]);
-      hdataMatchTrackYPoints->Fill(DataSptsY[nDataSpts]);
-      hdataMatchTrackZPoints->Fill(DataSptsZ[nDataSpts]);
-	 
-      // ### Histogramming the dE/dX ###
-      hdatadEdX->Fill(DatadEdX[nDataSpts]);
-	 
-      // ### Histogramming the dQ/dX ###
-      hdatadQdX->Fill(DatadQdX[nDataSpts]);
-	 
-      // ### Histogramming the residual range ###
-      hdataResRange->Fill(DataResRange[nDataSpts]);
-      // ### Histogramming the Pitch ###
-      hdataTrkPitch->Fill(DataSptPitch[nDataSpts]);
-	 
-      // ### Filling 2d dE/dX vs RR ###
-      hdatadEdXvsRR->Fill(DataResRange[nDataSpts], DatadEdX[nDataSpts]);
-	 
-      // =====================================================================
-      // === Breaking the TPC into 4 quadrants to analyze the dE/dX and dQ/dX
-      // ===               Q1: 0 cm    < z    < 22.5 cm
-      // ===               Q2: 22.5 cm < z    < 45 cm
-      // ===               Q3: 45 cm   < z    < 67.5 cm
-      // ===               Q4: 67.5 cm < z    < 90 cm
-      // =====================================================================
-      if(DataSptsZ[nDataSpts] > 0    && DataSptsZ[nDataSpts] < 22.5)
+      // ### Loop over the hits ###
+      for (int ihit = 0; ihit<nhits; ++ihit)
          {
-	 hdatadEdXQ1->Fill(DatadEdX[nDataSpts]);
-	 hdatadQdXQ1->Fill(DatadQdX[nDataSpts]);
-	 }
-      if(DataSptsZ[nDataSpts] > 22.5 && DataSptsZ[nDataSpts] < 45)
-         {
-	 hdatadEdXQ2->Fill(DatadEdX[nDataSpts]);
-	 hdatadQdXQ2->Fill(DatadQdX[nDataSpts]);
-	 }
-      if(DataSptsZ[nDataSpts] > 45   && DataSptsZ[nDataSpts] < 67.5)
-         {
-	 hdatadEdXQ3->Fill(DatadEdX[nDataSpts]);
-	 hdatadQdXQ3->Fill(DatadQdX[nDataSpts]);
-	 }
-      if(DataSptsZ[nDataSpts] > 67.5 && DataSptsZ[nDataSpts] < 90)
-	 {
-	 hdatadEdXQ4->Fill(DatadEdX[nDataSpts]);
-	 hdatadQdXQ4->Fill(DatadQdX[nDataSpts]);
-	 }
+	 // ##################################
+	 // ### Match the track to the hit ###
+	 // ##################################
+	 if (hit_trkkey[ihit]==nTPCtrk)
+	    {
+	    // #################################################
+	    // ### Require the hits to be in the right plane ###
+	    // #################################################
+	    if (hit_plane[ihit] == plane)
+	       {
+	       DatadEdX[nDataTrks][nDataSpts]     = corrdEdx(hit_dEds[ihit]);
+	       DatadQdX[nDataTrks][nDataSpts]     = hit_dQds[ihit];
+	       
+	       DataResRange[nDataTrks][nDataSpts] = hit_resrange[ihit];
+	       DataSptPitch[nDataTrks][nDataSpts] = hit_ds[ihit];
+	       DataSptsX[nDataTrks][nDataSpts] = hit_x[ihit];
+	       DataSptsY[nDataTrks][nDataSpts] = hit_y[ihit];
+	       DataSptsZ[nDataTrks][nDataSpts] = hit_z[ihit];
+	       
+	       // ###################################################
+	       // ### Adding an option to calculate the 3-d pitch ###
+	       // ###################################################
+	       if(Calculate3dPitch && ihit > 0)
+	          {
+		  float dE = DatadEdX[nDataTrks][nDataSpts] * DataSptPitch[nDataTrks][nDataSpts];
+		  
+		  float dX = (DataSptsX[nDataTrks][nDataSpts] - DataSptsX[nDataTrks][nDataSpts - 1]);
+		  float dY = (DataSptsY[nDataTrks][nDataSpts] - DataSptsY[nDataTrks][nDataSpts - 1]);
+		  float dZ = (DataSptsZ[nDataTrks][nDataSpts] - DataSptsZ[nDataTrks][nDataSpts - 1]);
+		  
+		  float ds = sqrt( (dX*dX) + (dY*dY) + (dZ*dZ) );
+		  
+		  DatadEdX[nDataTrks][nDataSpts] = dE/ds;
+		  DataSptPitch[nDataTrks][nDataSpts] = ds;
+		  
+		  }//<---end calculate 3-d pitch
+	       
+	       
+	       nDataSpts++;
+	       }//<---end matching hit plane
+	    }//<---end matching hit to track
 	 
-       nDataSpts++;
-      
-      
-      }//<---End nspts loop
-
-
-// ---------------------------------------------------------------------------------------------------------------------------------------
-   bool HasToBeReordered = false;
+	 }//<---End
+      nSpacePoints[nDataTrks] = nDataSpts;	 
+      nDataSpts = 0;	 
+      nDataTrks++;
+      }//<---End nTPCtrk loop    
+   
+   // ---------------------------------------------------------------------------------------------------------------------------------------
+   bool HasToBeReordered[20] = {false};
    int ReorderedCount = 0;
+   int ReorderTrkCount[20] = {0};
    int bb = 0;
    // ############################################################
    // ### Fix the reordering problem of the calorimetry points ###
    // ############################################################
    if(FixCaloIssue_Reordering)
       {
-      // ################################
-      // ### Loop over the caloPoints ###
-      // ################################
-      for(int caloPoints = 0; caloPoints < nDataSpts-1; caloPoints++)
+      
+      for( int trkPoints = 0; trkPoints < nDataTrks; trkPoints++)
          {
-	 // ###           If this points Residual Range is smaller than the       ###
-	 // ### next point, then things may be out of wack and we want to reorder ###
-	 if(DataResRange[caloPoints] < DataResRange[caloPoints+1])
-	    {
-	    // #######################################################
-	    // ### Set a flag that this might have to be reordered ###
-	    // #######################################################
-	    HasToBeReordered = true;
+         // ################################
+         // ### Loop over the caloPoints ###
+         // ################################
+         for(int caloPoints = 0; caloPoints < nSpacePoints[trkPoints]-1; caloPoints++)
+            {
+	    // ###           If this points Residual Range is smaller than the       ###
+	    // ### next point, then things may be out of wack and we want to reorder ###
+	    if(DataResRange[trkPoints][caloPoints] < DataResRange[trkPoints][caloPoints+1])
+	       {
+	       // #######################################################
+	       // ### Set a flag that this might have to be reordered ###
+	       // #######################################################
+	       HasToBeReordered[trkPoints] = true;
 	    
-	    // ### counting the points that are out of order ###
-	    ReorderedCount++;
-	    }
+	       // ### counting the points that are out of order ###
+	       ReorderedCount++;
+	       }
 
-         }//<---End caloPoints
+            }//<---End caloPoints
+	 ReorderTrkCount[trkPoints] = ReorderedCount;
+	 ReorderedCount = 0;   
+	 }//<---End trkPoints
       }//<---End fixing the ordering problem
    
    // #####################################################
    // ### The things need to be reorderd for this track ###
    // #####################################################
-   if(HasToBeReordered && ( (nDataSpts - ReorderedCount) == 1))
+   
+   for(int trkpt = 0; trkpt < nDataTrks; trkpt++)
       {
-      
-      // ### Temp Variables for fixing ###
-      double tempRR[1000] = {0.};
-      double tempdEdX[1000] = {0.};
-      double tempdQdX[1000] = {0.};
-      double tempPitch[1000] = {0.};
-      
-      double tempx[1000] = {0.};
-      double tempy[1000] = {0.};
-      double tempz[1000] = {0.};
-      
-      // ### Start at the last point ###
-      for(int aa = nDataSpts; aa > -1; aa--)
+   
+      if(HasToBeReordered[trkpt] && ( (nSpacePoints[trkpt] -  ReorderTrkCount[trkpt]) == 1))
          {
-	 // ##########################################
-	 // ### Skip the point if it is at the end ###
-	 // ##########################################
-	 if(DataResRange[aa] == 0){continue;}
-	 
-	 // ### Reorder the points ###
-	 tempRR[bb] = DataResRange[aa];
-	 tempdEdX[bb]     = DatadEdX[aa];
-	 tempdQdX[bb]     = DatadQdX[aa];
-	 tempPitch[bb] = DataSptPitch[aa];
-	 
-	 tempx[bb] = DataSptsX[aa];
-	 tempy[bb] = DataSptsY[aa];
-	 tempz[bb] = DataSptsZ[aa];
-	 
-	 bb++;
-	 }//<---end aa 
       
-      // ###########################
-      // ### Now swap the points ###
-      // ###########################
-      for(int reorder = 0; reorder < nDataSpts; reorder++)
+         // ### Temp Variables for fixing ###
+         double tempRR[20][1000] = {0.};
+         double tempdEdX[20][1000] = {0.};
+         double tempdQdX[20][1000] = {0.};
+         double tempPitch[20][1000] = {0.};
+      
+         double tempx[20][1000] = {0.};
+         double tempy[20][1000] = {0.};
+         double tempz[20][1000] = {0.};
+      
+         // ### Start at the last point ###
+         for(int aa = nSpacePoints[trkpt]; aa > -1; aa--)
+            {
+	    // ##########################################
+	    // ### Skip the point if it is at the end ###
+	    // ##########################################
+	    if(DataResRange[aa] == 0){continue;}
+	 
+	    // ### Reorder the points ###
+	    tempRR[trkpt][bb]       = DataResRange[trkpt][aa];
+	    tempdEdX[trkpt][bb]     = DatadEdX[trkpt][aa];
+	    tempdQdX[trkpt][bb]     = DatadQdX[trkpt][aa];
+	    tempPitch[trkpt][bb]    = DataSptPitch[trkpt][aa];
+	 
+	    tempx[trkpt][bb] = DataSptsX[trkpt][aa];
+	    tempy[trkpt][bb] = DataSptsY[trkpt][aa];
+	    tempz[trkpt][bb] = DataSptsZ[trkpt][aa];
+	 
+	    bb++;
+	    }//<---end aa 
+      
+         // ###########################
+         // ### Now swap the points ###
+         // ###########################
+         for(int reorder = 0; reorder < nSpacePoints[trkpt]; reorder++)
+            {
+	    DataResRange[trkpt][reorder] = tempRR[trkpt][reorder];
+	    DatadEdX[trkpt][reorder]     = tempdEdX[trkpt][reorder];
+	    DatadQdX[trkpt][reorder]     = tempdQdX[trkpt][reorder];
+	    DataSptPitch[trkpt][reorder] = tempPitch[trkpt][reorder];
+	 
+	    DataSptsX[trkpt][reorder] = tempx[trkpt][reorder];
+	    DataSptsY[trkpt][reorder] = tempy[trkpt][reorder];
+	    DataSptsZ[trkpt][reorder] = tempz[trkpt][reorder];
+	 
+	    }//<---End reorder loop
+      
+         }//<<----End trkpt loop
+      }//<---End Has to be reordered   
+   
+   // ####################################
+   // ### Loop over all the TPC Tracks ###
+   // ####################################
+   for(int nTPCtrk = 0; nTPCtrk < nDataTrks; nTPCtrk++)
+      {   
+   
+      for(int nspts = 0; nspts < nSpacePoints[nTPCtrk]; nspts++)
          {
-	 DataResRange[reorder] = tempRR[reorder];
-	 DatadEdX[reorder]     = tempdEdX[reorder];
-	 DatadQdX[reorder]     = tempdQdX[reorder];
-	 DataSptPitch[reorder] = tempPitch[reorder];
 	 
-	 DataSptsX[reorder] = tempx[reorder];
-	 DataSptsY[reorder] = tempy[reorder];
-	 DataSptsZ[reorder] = tempz[reorder];
+	 hdataXZTrackPoints->Fill(DataSptsZ[nTPCtrk][nspts], DataSptsX[nTPCtrk][nspts]);
+         hdataYZTrackPoints->Fill(DataSptsZ[nTPCtrk][nspts], DataSptsY[nTPCtrk][nspts]);
 	 
-	 }//<---End reorder loop
-      
-      
-      }//<---End Has to be reordered
+	 // ### Histogramming the dE/dX ###
+         hdatadEdX->Fill(DatadEdX[nTPCtrk][nspts]);
+	 
+         // ### Histogramming the dQ/dX ###
+         hdatadQdX->Fill(DatadQdX[nTPCtrk][nspts]);
+	 
+         // ### Histogramming the residual range ###
+         hdataResRange->Fill(DataResRange[nTPCtrk][nspts]);
+         // ### Histogramming the Pitch ###
+          if(DataSptPitch[nTPCtrk][nspts] > 0.4)
+	 {hdataTrkPitch->Fill(DataSptPitch[nTPCtrk][nspts]);}
+	 
+         // ### Filling 2d dE/dX vs RR ###
+         hdatadEdXvsRR->Fill(DataResRange[nTPCtrk][nspts], DatadEdX[nTPCtrk][nspts]);
+	 
+	 
+	 // =====================================================================
+         // === Breaking the TPC into 4 quadrants to analyze the dE/dX and dQ/dX
+         // ===               Q1: 0 cm    < z    < 22.5 cm
+         // ===               Q2: 22.5 cm < z    < 45 cm
+         // ===               Q3: 45 cm   < z    < 67.5 cm
+         // ===               Q4: 67.5 cm < z    < 90 cm
+         // =====================================================================
+         if(DataSptsZ[nTPCtrk][nspts] > 0    && DataSptsZ[nTPCtrk][nspts] < 22.5)
+            {
+	    hdatadEdXQ1->Fill(DatadEdX[nTPCtrk][nspts]);
+	    hdatadQdXQ1->Fill(DatadQdX[nTPCtrk][nspts]);
+	    }
+         if(DataSptsZ[nTPCtrk][nspts] > 22.5 && DataSptsZ[nTPCtrk][nspts] < 45)
+            {
+	    hdatadEdXQ2->Fill(DatadEdX[nTPCtrk][nspts]);
+	    hdatadQdXQ2->Fill(DatadQdX[nTPCtrk][nspts]);
+	    }
+         if(DataSptsZ[nTPCtrk][nspts] > 45   && DataSptsZ[nTPCtrk][nspts] < 67.5)
+            {
+	    hdatadEdXQ3->Fill(DatadEdX[nTPCtrk][nspts]);
+	    hdatadQdXQ3->Fill(DatadQdX[nTPCtrk][nspts]);
+	    }
+         if(DataSptsZ[nTPCtrk][nspts] > 67.5 && DataSptsZ[nTPCtrk][nspts] < 90)
+	    {
+	    hdatadEdXQ4->Fill(DatadEdX[nTPCtrk][nspts]);
+	    hdatadQdXQ4->Fill(DatadQdX[nTPCtrk][nspts]);
+	    }
+	 
+	 
+	 }//<---end nSpts loop
+      }//<---End nTPCtrk loop
+   
+ 
 
-   // ##################################
-   // ### Printing things as a check ###
-   // ##################################
-/*   if(HasToBeReordered && VERBOSE)
-      {
-      for(int caloPoints = 0; caloPoints < nDataSpts; caloPoints++)
-         {
-	 std::cout<<"Run = "<<run<<", Event = "<<event<<" point = "<<caloPoints<<", RR = "<<DataResRange[caloPoints]<<", dE/dX = "<<DatadEdX[caloPoints]<<std::endl;
-      
-      
-         }//<---End caloPoints
-      std::cout<<std::endl;	 
-      }//<---Putting in a print to make sure things are reordered correctly   */
-   
-// ---------------------------------------------------------------------------------------------------------------------------------------
-   
-   
-   
-   // ####################################################################
-   // ### Fix the calorimetry issues associated with huge fluctuations ###
-   // ###            by extrapolating through the points               ###
-   // ####################################################################
-   if(FixCaloIssue_ExtremeFluctuation)
-      {
-      // ################################
-      // ### Loop over the caloPoints ###
-      // ################################
-      for(int caloPoints = 0; caloPoints < nDataSpts; caloPoints++)
-         {
-	 
-	 // ###################################################
-	 // ### If the dE/dX is large and at the end of the ###
-	 // ###  track as expected with a proton attached   ###
-	 // ###################################################
-	 if(DatadEdX[caloPoints] > 40. && caloPoints == (nDataSpts-1) )
-	    {
-	    // ##########################################################
-	    // ### Set this point equal to the previous point's dE/dX ###
-	    // ##########################################################
-	    
-	    hdataFixedCaloPointZX->Fill(DataSptsZ[caloPoints], DataSptsX[caloPoints], DatadEdX[caloPoints]);
-	    hdataFixedCaloPointZY->Fill(DataSptsZ[caloPoints], DataSptsY[caloPoints], DatadEdX[caloPoints]);
-	    
-	    DatadEdX[caloPoints] = DatadEdX[caloPoints - 1];
-	    
-	    
-	    }//<---End large and at the end of the track
-	 
-	 // ############################################################
-	 // ### Else, if it is a large dE/dX but not the first point ###
-	 // ############################################################
-	 else if(DatadEdX[caloPoints] > 40. && caloPoints < (nDataSpts-1) && caloPoints > 0.)
-	    {
-	    
-	    // #################################################################
-	    // ### Then just average between the previous and the next point ###
-	    // #################################################################
-	    
-	    hdataFixedCaloPointZX->Fill(DataSptsZ[caloPoints], DataSptsX[caloPoints], DatadEdX[caloPoints]);
-	    hdataFixedCaloPointZY->Fill(DataSptsZ[caloPoints], DataSptsY[caloPoints], DatadEdX[caloPoints]);
-	    
-	    DatadEdX[caloPoints] = ( (DatadEdX[caloPoints - 1] + DatadEdX[caloPoints + 1]) / 2.);
-	    
-	    }//<--End large and not at the end of the track
-      
-         }//<---End caloPoints loop
-      
-      }//<---Only fixing calorimetry for big fluctuations
 
-// ---------------------------------------------------------------------------------------------------------------------------------------
-   
-   // ##############################################################################
-   // ### Fix the calorimetry issues associated with slightly large fluctuations ###
-   // ###                 by extrapolating through the points                    ###
-   // ##############################################################################
-   if(FixCaloIssue_LessExtremeFluctuation)
-      {
-      for(int caloPoints = 0; caloPoints < nDataSpts; caloPoints++)
-         {
-	 // ### If dE/dX > 15 and more than 10cm from the end of the track and isn't the first or last point ###
-	 if(DatadEdX[caloPoints] > 15. && DataResRange[caloPoints] > 10. && caloPoints > 0.&& caloPoints < (nDataSpts-1) )
-	    {
-	    
-	    // ### Check to see if the previous point is greater than 15 ###
-	    if(DatadEdX[caloPoints-1] > 15.)
-	       {
-	       // ### Check to see if the next point is greater than 15 ###
-	       if(DatadEdX[caloPoints+1] > 15. )
-	          {
-		  // ### Go 2 points before and after ###
-		  hdataFixedCaloPointZX->Fill(DataSptsZ[caloPoints], DataSptsX[caloPoints], DatadEdX[caloPoints]);
-	          hdataFixedCaloPointZY->Fill(DataSptsZ[caloPoints], DataSptsY[caloPoints], DatadEdX[caloPoints]);
-		  
-		  DatadEdX[caloPoints] = ( (DatadEdX[caloPoints - 2] + DatadEdX[caloPoints + 2]) / 2.);
-		  }
-	       else
-	          {
-		  // ### Go 2 points before and one point after ###
-		  
-		  hdataFixedCaloPointZX->Fill(DataSptsZ[caloPoints], DataSptsX[caloPoints], DatadEdX[caloPoints]);
-	          hdataFixedCaloPointZY->Fill(DataSptsZ[caloPoints], DataSptsY[caloPoints], DatadEdX[caloPoints]);
-		  
-		  DatadEdX[caloPoints] = ( (DatadEdX[caloPoints - 2] + DatadEdX[caloPoints + 1]) / 2.);
-		  }
-	        }
-	    else if(DatadEdX[caloPoints-1] <= 15.)
-	       {
-	       if(DatadEdX[caloPoints+1] > 15. )
-	          {
-		  
-		  hdataFixedCaloPointZX->Fill(DataSptsZ[caloPoints], DataSptsX[caloPoints], DatadEdX[caloPoints]);
-	          hdataFixedCaloPointZY->Fill(DataSptsZ[caloPoints], DataSptsY[caloPoints], DatadEdX[caloPoints]);
-		  
-		  DatadEdX[caloPoints] = ( (DatadEdX[caloPoints - 1] + DatadEdX[caloPoints+2]) / 2.);
-		  }
-	       else
-	          {
-		  
-		  hdataFixedCaloPointZX->Fill(DataSptsZ[caloPoints], DataSptsX[caloPoints], DatadEdX[caloPoints]);
-	          hdataFixedCaloPointZY->Fill(DataSptsZ[caloPoints], DataSptsY[caloPoints], DatadEdX[caloPoints]);
-		  
-		  DatadEdX[caloPoints] = ( (DatadEdX[caloPoints - 2] + DatadEdX[caloPoints + 1]) / 2.);
-		  }
-	       }
-	   else DatadEdX[caloPoints] = ( (DatadEdX[caloPoints - 1] + DatadEdX[caloPoints+1]) / 2.);
-	   }
-	
-      
-         }//<---End caloPoints loop
-      
-      }//<---Only fixing calorimetry for less big fluctuations   
-   
-   
-   
-   // ##########################################
-   // ### Filling the fixed dE/dX vs RR plot ###
-   // ##########################################
-   for(int caloPoints = 0; caloPoints < nDataSpts; caloPoints++)
-      {
-      
-      hdatadEdXvsRRFix->Fill(DataResRange[caloPoints], DatadEdX[caloPoints]);
-      
-      hdatadEdXFixed->Fill(DatadEdX[caloPoints]);
-      
-      hdatadQdXFixed->Fill(DatadQdX[caloPoints]);
-      
-      // =====================================================================
-      // === Breaking the TPC into 4 quadrants to analyze the dE/dX and dQ/dX
-      // ===               Q1: 0 cm    < z    < 22.5 cm
-      // ===               Q2: 22.5 cm < z    < 45 cm
-      // ===               Q3: 45 cm   < z    < 67.5 cm
-      // ===               Q4: 67.5 cm < z    < 90 cm
-      // =====================================================================
-      if(DataSptsZ[caloPoints] > 0    && DataSptsZ[caloPoints] < 22.5)
-         {
-	 hdatadEdXQ1Fixed->Fill(DatadEdX[caloPoints]);
-	 hdatadQdXQ1Fixed->Fill(DatadQdX[caloPoints]);
-	 }
-      if(DataSptsZ[caloPoints] > 22.5 && DataSptsZ[caloPoints] < 45)
-         {
-	 hdatadEdXQ2Fixed->Fill(DatadEdX[caloPoints]);
-	 hdatadQdXQ2Fixed->Fill(DatadQdX[caloPoints]);
-	 }
-      if(DataSptsZ[caloPoints] > 45   && DataSptsZ[caloPoints] < 67.5)
-         {
-	 hdatadEdXQ3Fixed->Fill(DatadEdX[caloPoints]);
-	 hdatadQdXQ3Fixed->Fill(DatadQdX[caloPoints]);
-	 }
-      if(DataSptsZ[caloPoints] > 67.5 && DataSptsZ[caloPoints] < 90)
-         {
-	 hdatadEdXQ4Fixed->Fill(DatadEdX[caloPoints]);
-	 hdatadQdXQ4Fixed->Fill(DatadQdX[caloPoints]);
-	 }
-      
-      }//<---End Fix   
-   /*std::cout<<std::endl;
-   std::cout<<"Track Vtx X = "<<trkvtxx[0]<<", Y = "<<trkvtxy[0]<<", Z = "<<trkvtxz[0]<<std::endl;
-   std::cout<<"Track End X = "<<trkendx[0]<<", Y = "<<trkendy[0]<<", Z = "<<trkendz[0]<<std::endl;
-   std::cout<<"Delta Y = "<<DeltaY<<std::endl;
-   std::cout<<std::endl;*/
    
    
    

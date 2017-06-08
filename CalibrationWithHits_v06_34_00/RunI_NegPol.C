@@ -573,7 +573,8 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	    // #################################################
 	    if (hit_plane[ihit] == plane)
 	       {
-	       DatadEdX[nDataTrks][nDataSpts]     = corrdEdx(hit_dEds[ihit]);
+	       //DatadEdX[nDataTrks][nDataSpts]     = corrdEdx(hit_dEds[ihit]);
+	       DatadEdX[nDataTrks][nDataSpts]     = hit_dEds[ihit];
 	       DatadQdX[nDataTrks][nDataSpts]     = hit_dQds[ihit];
 	       
 	       DataResRange[nDataTrks][nDataSpts] = hit_resrange[ihit];
