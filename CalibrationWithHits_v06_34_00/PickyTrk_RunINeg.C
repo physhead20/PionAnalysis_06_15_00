@@ -1,5 +1,5 @@
-#define RunI_NegPol_cxx
-#include "RunI_NegPol.h"
+#define PickyTrk_RunINeg_cxx
+#include "PickyTrk_RunINeg.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -130,7 +130,7 @@ TH1D *hdatadEdX_1150_1200 = new TH1D("hdatadEdX_1150_1200", "Matched Track dE/dX
 
 
 
-void RunI_NegPol::Loop()
+void PickyTrk_RunINeg::Loop()
 {
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
@@ -248,7 +248,7 @@ int MatchWCTrackIndex[10] = {0};
 
 // ====================================================
 // ======  Make histogram file for data sample  ======= 
-TFile myfile("./TJCalibrationMethod_RunINegPol_0.055Collection_ThroughGoing.root","RECREATE");
+TFile myfile("./TJCalibrationMethod_RunINegPol_NewPickySample_ThroughGoing.root","RECREATE");
 
 // ###############################
 // ### Looping over all events ###
@@ -762,7 +762,7 @@ if(AtLeastOneThroughGoingTrack){nEvtsThroughGoing++;}
    // ##################################
    // ### Printing things as a check ###
    // ##################################
-   if(HasToBeReordered && VERBOSE)
+   if(HasToBeReordered[0] && VERBOSE)
       {
       for(int trackPoint = 0; trackPoint < nDataTrks; trackPoint++)
          {

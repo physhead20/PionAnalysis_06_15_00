@@ -1,5 +1,5 @@
-#define RunI_NegPol_cxx
-#include "RunI_NegPol.h"
+#define RunI_PosPol_Protons_cxx
+#include "RunI_PosPol_Protons.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -61,9 +61,6 @@ TH2D *hdataWCTrackMomentumVSTOF = new TH2D("hdataWCTrackMomentumVSTOF", "TOF vs 
 
 /////////////////////////////////// "Matched Track" dE/dX 150 - 200 MeV Momentum /////////////////////////////////////////////////////
 TH1D *hdatadEdX = new TH1D("hdatadEdX", "Matched Track dE/dX", 200, 0, 50);
-
-/////////////////////////////////// "Matched Track" Track Pitch //////////////////////////////////////////
-TH1D *hdataTrkPitch = new TH1D("hdataTrkPitch", "Matched Track Pitch", 1000, 0, 5);
 
 /////////////////////////////////// "Matched Track" dE/dX 150 - 200 MeV Momentum /////////////////////////////////////////////////////
 TH1D *hdatadEdX_150_200 = new TH1D("hdatadEdX_150_200", "Matched Track dE/dX 150 MeV < P < 200 MeV", 200, 0, 50);
@@ -130,7 +127,7 @@ TH1D *hdatadEdX_1150_1200 = new TH1D("hdatadEdX_1150_1200", "Matched Track dE/dX
 
 
 
-void RunI_NegPol::Loop()
+void RunI_PosPol_Protons::Loop()
 {
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
@@ -158,17 +155,17 @@ double alphaCut = 10;
 // ### Setting the Wire Chamber momentum range and ###
 // ###     the TOF range for good particle ID      ###
 // ###################################################
-double LowerWCTrkMomentum = 100.0; //<--(MeV)
-double HighWCTrkMomentum  = 2000.0;//<--(MeV)
+//double LowerWCTrkMomentum = 100.0; //<--(MeV)
+//double HighWCTrkMomentum  = 2000.0;//<--(MeV)
 
-//double LowerWCTrkMomentum = 450.0; //<--(MeV)
-//double HighWCTrkMomentum  = 1100.0;//<--(MeV)
+double LowerWCTrkMomentum = 450.0; //<--(MeV)
+double HighWCTrkMomentum  = 1100.0;//<--(MeV)
 
-double LowerTOF = 10.0; //<--(ns)
-double HighTOF  = 30.0; //<--(ns)
+//double LowerTOF = 10.0; //<--(ns)
+//double HighTOF  = 26.0; //<--(ns)
 
-//double LowerTOF = 28.0; //<--(ns)
-//double HighTOF  = 55.0; //<--(ns)
+double LowerTOF = 28.0; //<--(ns)
+double HighTOF  = 55.0; //<--(ns)
 
 
 // ########################################################################
@@ -201,7 +198,7 @@ int UpperPartOfTPC = 14.0;
 // ###  True = Only keep through going tracks  ###
 // ###   False = Keep all types of tracks      ###
 // ###############################################
-bool SelectThroughGoing = true;
+bool SelectThroughGoing = false;
 
 // ######################################################
 // ### Choose whether or not to fix the calo problems ###
@@ -212,17 +209,6 @@ bool SelectThroughGoing = true;
 // ######################################################
 bool FixCaloIssue_Reordering = true; 
 
-
-// ####################################################
-// ### Choose whether or not to use the 3d distance ###
-// ### between points for the pitch and recalculate ###
-// ###    the dE/dX distribution based on this      ###
-// ###                                              ###
-// ### True = Recalculate                           ###
-// ### False = Use the existing dE/dX               ###
-// ####################################################
-bool Calculate3dPitch = false;
-
 // ###################################################
 // ### Setting a flag to print out bunch of checks ###
 // ###################################################
@@ -230,7 +216,7 @@ bool VERBOSE = false;
 
 
 // ### The assumed energy loss between the cryostat and the TPC ###
-float entryTPCEnergyLoss = 40.; //MeV
+float entryTPCEnergyLoss = 60.; //MeV
 
 
 // ##########################################################
@@ -248,7 +234,7 @@ int MatchWCTrackIndex[10] = {0};
 
 // ====================================================
 // ======  Make histogram file for data sample  ======= 
-TFile myfile("./TJCalibrationMethod_RunINegPol_0.055Collection_ThroughGoing.root","RECREATE");
+TFile myfile("./TJCalibrationMethod_RunIPosPol_0.055Collection_Proton.root","RECREATE");
 
 // ###############################
 // ### Looping over all events ###
@@ -573,8 +559,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	    // #################################################
 	    if (hit_plane[ihit] == plane)
 	       {
-	       //DatadEdX[nDataTrks][nDataSpts]     = corrdEdx(hit_dEds[ihit]);
-	       DatadEdX[nDataTrks][nDataSpts]     = hit_dEds[ihit];
+	       DatadEdX[nDataTrks][nDataSpts]     = corrdEdx(hit_dEds[ihit]);
 	       DatadQdX[nDataTrks][nDataSpts]     = hit_dQds[ihit];
 	       
 	       DataResRange[nDataTrks][nDataSpts] = hit_resrange[ihit];
@@ -582,26 +567,6 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	       DataSptsX[nDataTrks][nDataSpts] = hit_x[ihit];
 	       DataSptsY[nDataTrks][nDataSpts] = hit_y[ihit];
 	       DataSptsZ[nDataTrks][nDataSpts] = hit_z[ihit];
-	       
-	       // ###################################################
-	       // ### Adding an option to calculate the 3-d pitch ###
-	       // ###################################################
-	       if(Calculate3dPitch && ihit > 0)
-	          {
-		  float dE = DatadEdX[nDataTrks][nDataSpts] * DataSptPitch[nDataTrks][nDataSpts];
-		  
-		  float dX = (DataSptsX[nDataTrks][nDataSpts] - DataSptsX[nDataTrks][nDataSpts - 1]);
-		  float dY = (DataSptsY[nDataTrks][nDataSpts] - DataSptsY[nDataTrks][nDataSpts - 1]);
-		  float dZ = (DataSptsZ[nDataTrks][nDataSpts] - DataSptsZ[nDataTrks][nDataSpts - 1]);
-		  
-		  float ds = sqrt( (dX*dX) + (dY*dY) + (dZ*dZ) );
-		  
-		  DatadEdX[nDataTrks][nDataSpts] = dE/ds;
-		  DataSptPitch[nDataTrks][nDataSpts] = ds;
-		  
-		  }//<---end calculate 3-d pitch
-	       
-	       
 	       nDataSpts++;
 	       }//<---end matching hit plane
 	    }//<---end matching hit to track
@@ -795,9 +760,6 @@ if(AtLeastOneThroughGoingTrack){nEvtsThroughGoing++;}
       for(int nspts = 0; nspts < nSpacePoints[nTPCtrk]; nspts++)
          {
          hdatadEdX->Fill(DatadEdX[nTPCtrk][nspts]);
-	 
-	 if(DataSptPitch[nTPCtrk][nspts] > 0.4)
-	 {hdataTrkPitch->Fill(DataSptPitch[nTPCtrk][nspts]);}
 	 
 	 }
       
@@ -1167,7 +1129,6 @@ std::cout<<"Events w/ through going track = "<<nEvtsThroughGoing<<std::endl;
 hdataTOFNoCuts->Write(); 
 hdataWCTrackMomentumVSTOF->Write(); 
 hdatadEdX->Write();
-hdataTrkPitch->Write();
 
 hdatadEdX_150_200->Write();
 hdatadEdX_200_250->Write();

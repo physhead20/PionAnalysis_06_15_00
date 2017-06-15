@@ -49,30 +49,14 @@ for(int a = 0; a < 21; a++){binXError[a] = 25.;}
 // ########################
 // ### Collection Plane ###
 // ########################
+//TFile *f1 = new TFile("./TJCalibrationMethod_RunIIPosPol_PickyNewCalo_NotThroughGoing.root");
+TFile *f1 = new TFile("./TJCalibrationMethod_RunIIPosPol_PickyNewCalo_ThroughGoing.root");
 
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_DefaultCollection_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.052Collection_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.058Collection_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.055Collection_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.055Collection_ThroughGoing_3dPitch.root");
-
-
-// --- New Calo Files ---
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_HighYieldNewCalo_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_HighYieldNewCalo_NotThroughGoing.root");
-
-
-// --- New Calo Files RunII just for fun ---
-TFile *f1 = new TFile("./TJCalibrationMethod_RunIIPosPol_PickyTrkNewCalo_ThroughGoing.root");
 
 // #######################
 // ### Induction Plane ###
 // #######################
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_DefaultInduction_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.0347Induction_ThroughGoing.root");
-//TFile *f1 = new TFile("./TJCalibrationMethod_RunINegPol_0.0507Induction_ThroughGoing.root");
-
-
+//TFile *f1 = new TFile("./TJCalibrationMethod_PionMC_RunI_ThroughGoing_Induction.root");
 
 
 
@@ -203,7 +187,7 @@ dEdXError[8]  = data_gaus->GetParError(1);
 TH1F *h600_650 = (TH1F*)f1->Get("hdatadEdX_600_650");
 TF1 *data_gaus = new TF1("data_gaus","landau",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h600_650->Fit(data_gaus,"R+0LLi","0",1.25, 4.00);
+h600_650->Fit(data_gaus,"R+0LLi","0",1.25, 5.00);
 
 dEdX[9]       = data_gaus->GetParameter(1);
 dEdXError[9]  = data_gaus->GetParError(1);
@@ -229,7 +213,7 @@ dEdXError[10]  = data_gaus->GetParError(1);
 TH1F *h700_750 = (TH1F*)f1->Get("hdatadEdX_700_750");
 TF1 *data_gaus = new TF1("data_gaus","landau",0, 50);
 // ### Fitting the data dE/dX peak with Gaussian ###
-h700_750->Fit(data_gaus,"R+0LLi","0",1.25, 6.00);
+h700_750->Fit(data_gaus,"R+0LLi","0",1.25, 5.00);
 
 dEdX[11]       = data_gaus->GetParameter(1);
 dEdXError[11]  = data_gaus->GetParError(1);
@@ -425,7 +409,7 @@ leg->SetTextAlign(12);
 leg->SetFillColor(kWhite);
 leg->SetLineColor(kWhite);
 leg->SetShadowColor(kWhite);
-leg->SetHeader("LArIAT Run-I Negative Polarity");
+leg->SetHeader("LArIAT Run-II Positive Polarity");
 leg->AddEntry(gr,"e/#pi/#mu Data");
 leg->AddEntry(grMuon,"Muon"); 
 leg->AddEntry(grPion,"Pion");
@@ -469,8 +453,8 @@ leg->SetTextAlign(12);
 leg->SetFillColor(kWhite);
 leg->SetLineColor(kWhite);
 leg->SetShadowColor(kWhite);
-leg->SetHeader("LArIAT Run-I Negative Polarity");
-leg->AddEntry(grFullBin,"e/#pi/#mu Data");
+leg->SetHeader("LArIAT Run-II Positive Polarity");
+leg->AddEntry(gr,"e/#pi/#mu Data");
 leg->AddEntry(grMuon,"Muon"); 
 leg->AddEntry(grPion,"Pion");
 leg->Draw();

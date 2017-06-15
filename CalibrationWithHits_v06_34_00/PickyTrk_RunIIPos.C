@@ -1,5 +1,5 @@
-#define RunI_NegPol_cxx
-#include "RunI_NegPol.h"
+#define PickyTrk_RunIIPos_cxx
+#include "PickyTrk_RunIIPos.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -34,8 +34,10 @@ float corrdEdx(float dEdx)
 
   float dQdx = log(dEdx * betap/(rho*Efield) + alpha) / (betap/(rho*Efield) * Wion);
   
-  dQdx *= 0.0153/caloconstant;
-
+  //dQdx *= 0.0153/caloconstant;
+  dQdx *= 0.055/caloconstant;
+  
+  
   //dQdx *= 0.0153/0.0382;
 
   float newdQdx = (exp(betap/(rho*Efield) * Wion * dQdx) - alpha)/(betap/(rho*Efield));
@@ -130,7 +132,7 @@ TH1D *hdatadEdX_1150_1200 = new TH1D("hdatadEdX_1150_1200", "Matched Track dE/dX
 
 
 
-void RunI_NegPol::Loop()
+void PickyTrk_RunIIPos::Loop()
 {
 if (fChain == 0) return;
 Long64_t nentries = fChain->GetEntriesFast();
@@ -223,6 +225,17 @@ bool FixCaloIssue_Reordering = true;
 // ####################################################
 bool Calculate3dPitch = false;
 
+
+// ####################################################
+// ### Choose whether we calculate dE/dX using info ###
+// ###    stored in the hits instead of the info    ###
+// ###           stored in the spacepoints          ###
+// ###                                              ###
+// ### True  = Use 2d Hits                          ###
+// ### False = Use Spacepoints                      ###
+// ####################################################
+bool CalculateUsingHits = false;
+
 // ###################################################
 // ### Setting a flag to print out bunch of checks ###
 // ###################################################
@@ -248,7 +261,7 @@ int MatchWCTrackIndex[10] = {0};
 
 // ====================================================
 // ======  Make histogram file for data sample  ======= 
-TFile myfile("./TJCalibrationMethod_RunINegPol_0.055Collection_ThroughGoing.root","RECREATE");
+TFile myfile("./TJCalibrationMethod_RunIIPosPol_PickyTrkNewCalo_ThroughGoing.root","RECREATE");
 
 // ###############################
 // ### Looping over all events ###
@@ -561,7 +574,10 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
       if(SelectThroughGoing && !ThroughGoingTrack[nTPCtrk]){continue;}
       
       // ### Loop over the hits ###
-      /*for (int ihit = 0; ihit<nhits; ++ihit)
+      
+      if(CalculateUsingHits)
+      {
+      for (int ihit = 0; ihit<nhits; ++ihit)
          {
 	 // ##################################
 	 // ### Match the track to the hit ###
@@ -607,7 +623,7 @@ for (Long64_t jentry=0; jentry<nentries;jentry++)
 	    }//<---end matching hit to track
 	 
 	 }//<---End 
-      */
+      }//<---End Calculate using hits
       
       
       
